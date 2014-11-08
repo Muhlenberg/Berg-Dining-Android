@@ -194,11 +194,11 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         case 0:
             fragment = new DiningFragment(getNumDay());
             break;
-        case 1:
+        case 1: //hours
             break;
-        case 2:
+        case 2: //contact
             break;
-        case 3:
+        case 3: //help
             break;
         default:
             break;

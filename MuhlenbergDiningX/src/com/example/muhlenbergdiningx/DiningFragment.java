@@ -37,6 +37,11 @@ public class DiningFragment extends Fragment implements OnClickListener, OnItemC
 		this.day=day;
 	}
 	
+	public void setDay(int day)
+	{
+		this.day=day;
+	}
+	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance)
 	{
 		View rootView=null;
@@ -59,6 +64,8 @@ public class DiningFragment extends Fragment implements OnClickListener, OnItemC
 	public void onResume()
 	{
 		super.onResume();
+		
+		Toast.makeText(getActivity(), getTag(), Toast.LENGTH_SHORT).show();
 
 		DiningXmlParser parser = null;
 		InputStream is = null;
@@ -96,9 +103,9 @@ public class DiningFragment extends Fragment implements OnClickListener, OnItemC
 			meals.get(i).setText(parser.getLocations().get(0).get(0).get(i).getName());
 			meals.get(i).setOnClickListener(this);
 			
-			for(int j=0;j<parser.getLocations().get(0).get(i).get(i).size();j++)
+			for(int j=0;j<3;j++)
 			{
-				temp.add(parser.getLocations().get(0).get(i).get(i).get(j));
+				temp.add(parser.getLocations().get(0).get(0).get(i).get(j));
 			}
 			
 			adapters[i] = new DiningGridAdapter(getActivity(), temp);
@@ -118,7 +125,6 @@ public class DiningFragment extends Fragment implements OnClickListener, OnItemC
 	
 	private void weekendSetup(DiningXmlParser parser)
 	{
-		Toast.makeText(getActivity(), "ID "+ this.getView().getId(), Toast.LENGTH_SHORT).show();
 		meals = new ArrayList<TextView>(2);
 		adapters = new DiningGridAdapter[2];
 		stations = new ArrayList<ArrayList<DiningStation>>();
@@ -134,9 +140,9 @@ public class DiningFragment extends Fragment implements OnClickListener, OnItemC
 			meals.get(i).setText(parser.getLocations().get(0).get(0).get(i).getName());
 			meals.get(i).setOnClickListener(this);
 			
-			for(int j=0;j<parser.getLocations().get(0).get(i).get(i).size();j++)
+			for(int j=0;j<parser.getLocations().get(0).get(0).get(i).size();j++)
 			{
-				temp.add(parser.getLocations().get(0).get(i).get(i).get(j));
+				temp.add(parser.getLocations().get(0).get(0).get(i).get(j));
 			}
 			
 			adapters[i] = new DiningGridAdapter(getActivity(), temp);

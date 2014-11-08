@@ -22,8 +22,9 @@ public class DiningPagerAdapter extends FragmentStatePagerAdapter
 	@Override
 	public Fragment getItem(int pos) 
 	{
-		Log.d("adapter", "created dining frag " + pos);
-		return new DiningFragment(pos);
+		DiningFragment frag = new DiningFragment(pos);
+		frag.setDay(pos);
+		return frag;
 	}
 
 	@Override
