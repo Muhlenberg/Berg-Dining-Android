@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/weekendMealContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView 
+            android:id="@+id/weekend_brunch"
+            style="@style/diningPeriodStyle"
+            android:layout_weight="0.5"/>
+        <TextView 
+            android:id="@+id/weekend_dinner"
+            style="@style/diningPeriodStyle"
+            android:layout_weight="0.5"/>
+    </LinearLayout>
+    
+    <GridView 
+        android:id="@+id/weekendGridView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:numColumns="2"
+        android:layout_below="@id/weekendMealContainer"/>
+</RelativeLayout>
