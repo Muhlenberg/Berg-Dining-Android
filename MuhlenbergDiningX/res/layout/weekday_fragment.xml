@@ -6,7 +6,7 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/mealContainer"
+        android:id="@+id/weekdayMealContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -31,5 +31,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:numColumns="2"
-        android:layout_below="@id/mealContainer"/>
+        android:layout_below="@id/weekdayMealContainer"/>
+    
+    <TextView 
+        android:id="@+id/weekdayItemView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/weekdayMealContainer"
+        android:textSize="24sp"
+        android:scrollbars="vertical"
+        android:visibility="gone"/>
 </RelativeLayout>

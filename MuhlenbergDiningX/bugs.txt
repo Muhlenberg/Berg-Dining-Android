@@ -1,0 +1,5 @@
+﻿1. Layout does not change upon navigating to new fragment
+2. can only scroll horizontally on empty space (should we keep this?)
+3. navigation drawer doesnt actually do anything yet
+4. need to add spinner to first item in nav drawer
+5. blank on landscape mode

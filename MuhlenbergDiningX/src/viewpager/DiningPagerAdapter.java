@@ -1,54 +1,30 @@
 package viewpager;
 
-import com.example.muhlenbergdiningx.DiningFragment;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.util.Log;
-import android.util.SparseArray;
-import android.view.ViewGroup;
+import android.support.v4.app.FragmentPagerAdapter;
 
-public class DiningPagerAdapter extends FragmentStatePagerAdapter
+import com.example.muhlenbergdiningx.DiningFragment;
+import com.example.muhlenbergdiningx.DiningXmlParser;
+
+public class DiningPagerAdapter extends FragmentPagerAdapter
 {
-	private SparseArray<Fragment> activeFragments;
-
-	public DiningPagerAdapter(FragmentManager fm) 
+	private DiningXmlParser parser;
+	
+	public DiningPagerAdapter(FragmentManager fm, DiningXmlParser p) 
 	{
 		super(fm);
-		activeFragments = new SparseArray<Fragment>();
+		parser = p;
 	}
 
 	@Override
 	public Fragment getItem(int pos) 
 	{
-		DiningFragment frag = new DiningFragment(pos);
-		frag.setDay(pos);
-		return frag;
+		return DiningFragment.newInstance(pos, parser);
 	}
 
 	@Override
 	public int getCount() {
 		return 7;
 	}
-	
-	//source: http://stackoverflow.com/questions/8785221/retrieve-a-fragment-from-a-viewpager
-	//need this stuff to fix a viewpager issue described below
-	//http://stackoverflow.com/questions/10853611/viewpager-with-fragments-onpause-onresume
-	@Override
-	public Object instantiateItem(ViewGroup container, int position) {
-		Fragment fragment = (Fragment) super.instantiateItem(container, position);
-		activeFragments.put(position, fragment);
-		return fragment;
-	}
-
-	@Override
-	public void destroyItem(ViewGroup container, int position, Object object) {
-		activeFragments.remove(position);
-		super.destroyItem(container, position, object);
-	}
-
-	public Fragment getActiveFragment(int position) {
-		return activeFragments.get(position);
-	}
-}
+}	

@@ -1,10 +1,15 @@
 package com.example.muhlenbergdiningx;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import navdrawer.DiningNavItem;
 import navdrawer.DiningNavigationAdapter;
+
+import org.xmlpull.v1.XmlPullParserException;
+
 import viewpager.DiningPagerAdapter;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
@@ -27,7 +32,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
+
+import com.example.muhlenbergdiningx.DiningXmlParser.DiningLocation;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener, OnPageChangeListener
 {
@@ -48,6 +58,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	private CharSequence title;
 	private String[] tabs = {"Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"};
+	private DiningXmlParser parser;
+	
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -56,14 +68,26 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		setContentView(R.layout.activity_main);
 
 		title = "Muhlenberg Dining";
-
-		//viewpager and actionbar
+		
+		//make parser and pass it to other things
+		parser = null;
+		InputStream is = null;
+		try
+		{
+			is = getAssets().open("mDining.xml");
+			parser = new DiningXmlParser(is);
+		} 
+		catch(IOException ioe) {ioe.printStackTrace(); }
+		catch(XmlPullParserException e) {e.printStackTrace(); }
+		
+		//viewpager
 		viewPager = (ViewPager) findViewById(R.id.viewPager);
-		pagerAdapter = new DiningPagerAdapter(getSupportFragmentManager());
-		actionBar = getActionBar();
-
+		pagerAdapter = new DiningPagerAdapter(getSupportFragmentManager(), parser);
 		viewPager.setAdapter(pagerAdapter);
 		viewPager.setOnPageChangeListener(this);
+		
+		//actionbar
+		actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		actionBar.setBackgroundDrawable(new ColorDrawable(Color.RED));
 		actionBar.setStackedBackgroundDrawable(getResources().getDrawable(R.drawable.stacked_background));
@@ -76,7 +100,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			else
 				actionBar.addTab(actionBar.newTab().setText(tab_name).setTabListener(this), false);
 		}
-
 
 		//navigation drawer
 		navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
@@ -119,8 +142,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		if (savedInstanceState == null) {
 			displayView(0);
 		}
-		
-		
+
 		//get some display metrics for use in gridview
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -191,8 +213,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         // update the main content by replacing fragments
         Fragment fragment = null;
         switch (position) {
-        case 0:
-            fragment = new DiningFragment(getNumDay());
+        case 0: DiningFragment.newInstance(getNumDay(), parser);
             break;
         case 1: //hours
             break;
@@ -215,7 +236,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
             drawerLayout.closeDrawer(drawerList);
         } else {
             Log.d("MainActivity", "navigation drawer fragment error");
-        }
+        }    
     }
 	
 	private String convertDay(int pos)
@@ -234,19 +255,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	}
 	private String getDay()
 	{
-		Calendar cal = Calendar.getInstance();
-		int currentDay = cal.get(Calendar.DAY_OF_WEEK);
-		switch(currentDay)
-		{
-		case Calendar.SUNDAY: 	return tabs[6];
-		case Calendar.MONDAY: 	return tabs[0];
-		case Calendar.TUESDAY: 	return tabs[1];
-		case Calendar.WEDNESDAY:return tabs[2];
-		case Calendar.THURSDAY: return tabs[3];
-		case Calendar.FRIDAY: 	return tabs[4];
-		case Calendar.SATURDAY: return tabs[5];
-		default: return tabs[0];
-		}
+		return tabs[getNumDay()];
 	}
 	
 	private int getNumDay()

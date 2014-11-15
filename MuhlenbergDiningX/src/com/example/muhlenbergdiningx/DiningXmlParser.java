@@ -8,10 +8,12 @@ import java.util.Calendar;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 import android.util.Xml;
 
-public class DiningXmlParser
+public class DiningXmlParser implements Parcelable
 {
 	private ArrayList<DiningLocation> locations = new ArrayList<DiningLocation>();
 	public DiningXmlParser(InputStream is) throws XmlPullParserException, IOException
@@ -21,15 +23,12 @@ public class DiningXmlParser
 		parser.setInput(is, null);
 		parser.nextTag();
 		
-		String dayName = getDay();
-		
 		DiningLocation location = null;
 		DiningDay day = null;
 		DiningPeriod period = null;
 		DiningStation station = null;
 		DiningItem item = null;
 		
-		boolean correctDay=false;
 		int eventType;
 		while((eventType = parser.getEventType()) != XmlPullParser.END_DOCUMENT)
 		{
@@ -37,11 +36,8 @@ public class DiningXmlParser
 			{
 				if(parser.getName().equalsIgnoreCase("location"))
 					location = new DiningLocation(parser.getAttributeValue(0));
-				else if(parser.getName().equalsIgnoreCase("day") && parser.getAttributeValue(1).contains(dayName))
-				{
+				else if(parser.getName().equalsIgnoreCase("day"))
 					day = new DiningDay(parser.getAttributeValue(1));
-					correctDay=true;
-				}
 				else if(parser.getName().equalsIgnoreCase("period"))
 					period = new DiningPeriod(parser.getAttributeValue(0));
 				else if(parser.getName().equalsIgnoreCase("station"))
@@ -51,15 +47,15 @@ public class DiningXmlParser
 			}
 			else if(eventType == XmlPullParser.END_TAG)
 			{
-				if(parser.getName().equalsIgnoreCase("item")&&correctDay)
+				if(parser.getName().equalsIgnoreCase("item"))
 					station.add(item);
-				else if(parser.getName().equalsIgnoreCase("station")&&correctDay)
+				else if(parser.getName().equalsIgnoreCase("station"))
 					period.add(station);
-				else if(parser.getName().equalsIgnoreCase("period")&&correctDay)
+				else if(parser.getName().equalsIgnoreCase("period"))
 					day.add(period);
-				else if(parser.getName().equalsIgnoreCase("day")&&correctDay)
+				else if(parser.getName().equalsIgnoreCase("day"))
 					location.add(day);
-				else if(parser.getName().equalsIgnoreCase("location")&&correctDay)
+				else if(parser.getName().equalsIgnoreCase("location"))
 					locations.add(location);
 			}
 			
@@ -246,5 +242,17 @@ public class DiningXmlParser
 	public int getPeriodCount(int location, int day)
 	{
 		return locations.get(location).get(day).size();
+	}
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		// TODO Auto-generated method stub
+		
 	}
 }

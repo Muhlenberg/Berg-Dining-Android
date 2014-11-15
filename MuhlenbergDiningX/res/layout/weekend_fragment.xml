@@ -25,4 +25,12 @@
         android:layout_height="wrap_content"
         android:numColumns="2"
         android:layout_below="@id/weekendMealContainer"/>
+    
+    <TextView 
+        android:id="@+id/weekendItemView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/weekendMealContainer"
+        android:textSize="24sp"
+        android:visibility="gone"/>
 </RelativeLayout>
