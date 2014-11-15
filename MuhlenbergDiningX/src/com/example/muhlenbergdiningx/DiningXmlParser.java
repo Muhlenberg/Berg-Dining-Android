@@ -35,7 +35,7 @@ public class DiningXmlParser implements Parcelable
 			if(eventType == XmlPullParser.START_TAG)
 			{
 				if(parser.getName().equalsIgnoreCase("location"))
-					location = new DiningLocation(parser.getAttributeValue(0));
+					location = new DiningLocation(parser.getAttributeValue(1));
 				else if(parser.getName().equalsIgnoreCase("day"))
 					day = new DiningDay(parser.getAttributeValue(1));
 				else if(parser.getName().equalsIgnoreCase("period"))

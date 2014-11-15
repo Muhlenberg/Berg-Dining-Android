@@ -13,10 +13,17 @@
         <item>Help</item>
     </string-array>
 
+    <string-array name="spinner_items">
+        <item>Wood Dining</item>
+        <item>Mule Express</item>
+        <item>LSC Cafe</item>
+        <item>Java Joes</item>
+    </string-array>
+    
     <array name="nav_drawer_icons">
 	    <item>@drawable/home_icon</item>
 	    <item>@drawable/clock_icon</item>
-	    <item>@drawable/ic_launcher</item>
+	    <item>@drawable/phone_icon</item>
 	    <item>@drawable/question_icon</item> 
 	</array>
 </resources>

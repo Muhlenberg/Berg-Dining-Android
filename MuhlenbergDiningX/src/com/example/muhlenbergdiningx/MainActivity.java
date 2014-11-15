@@ -59,7 +59,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	private CharSequence title;
 	private String[] tabs = {"Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"};
 	private DiningXmlParser parser;
-	
+
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -68,7 +68,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		setContentView(R.layout.activity_main);
 
 		title = "Muhlenberg Dining";
-		
+
 		//make parser and pass it to other things
 		parser = null;
 		InputStream is = null;
@@ -79,17 +79,16 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		} 
 		catch(IOException ioe) {ioe.printStackTrace(); }
 		catch(XmlPullParserException e) {e.printStackTrace(); }
-		
+
 		//viewpager
 		viewPager = (ViewPager) findViewById(R.id.viewPager);
 		pagerAdapter = new DiningPagerAdapter(getSupportFragmentManager(), parser);
 		viewPager.setAdapter(pagerAdapter);
 		viewPager.setOnPageChangeListener(this);
-		
+
 		//actionbar
 		actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		actionBar.setBackgroundDrawable(new ColorDrawable(Color.RED));
 		actionBar.setStackedBackgroundDrawable(getResources().getDrawable(R.drawable.stacked_background));
 
 		//add tabs to actionbar, making current day selected automatically
@@ -109,7 +108,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		drawerList = (ListView) findViewById(R.id.dining_drawer);
 
 		navDrawerItems = new ArrayList<DiningNavItem>();
-		navDrawerItems.add(new DiningNavItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
+		navDrawerItems.add(new DiningNavItem(true, navMenuIcons.getResourceId(0, -1))); //spinner
 		navDrawerItems.add(new DiningNavItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
 		navDrawerItems.add(new DiningNavItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
 		navDrawerItems.add(new DiningNavItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
@@ -174,32 +173,32 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	}
 
 	@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (drawerToggle.onOptionsItemSelected(item)) 
-            return true;
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (drawerToggle.onOptionsItemSelected(item)) 
+			return true;
 
-        // Handle action bar actions click
-        switch (item.getItemId()) {
-        case R.id.action_settings:
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
-        }
-    }
-	
+		// Handle action bar actions click
+		switch (item.getItemId()) {
+		case R.id.action_settings:
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
 	@Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        drawerToggle.syncState();
-    }
- 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggls
-        drawerToggle.onConfigurationChanged(newConfig);
-    }
-    
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		drawerToggle.syncState();
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		// Pass any configuration change to the drawer toggls
+		drawerToggle.onConfigurationChanged(newConfig);
+	}
+
 	@Override
 	public void onBackPressed()
 	{
@@ -210,35 +209,35 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	}
 
 	private void displayView(int position) {
-        // update the main content by replacing fragments
-        Fragment fragment = null;
-        switch (position) {
-        case 0: DiningFragment.newInstance(getNumDay(), parser);
-            break;
-        case 1: //hours
-            break;
-        case 2: //contact
-            break;
-        case 3: //help
-            break;
-        default:
-            break;
-        }
- 
-        if (fragment != null) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
- 
-            // update selected item and title, then close the drawer
-            drawerList.setItemChecked(position, true);
-            drawerList.setSelection(position);
-            setTitle(navMenuTitles[position]);
-            drawerLayout.closeDrawer(drawerList);
-        } else {
-            Log.d("MainActivity", "navigation drawer fragment error");
-        }    
-    }
-	
+		// update the main content by replacing fragments
+		Fragment fragment = null;
+		switch (position) {
+		case 0: DiningFragment.newInstance(getNumDay(), parser);
+		break;
+		case 1: //hours
+			break;
+		case 2: //contact
+			break;
+		case 3: //help
+			break;
+		default:
+			break;
+		}
+
+		if (fragment != null) {
+			FragmentManager fragmentManager = getSupportFragmentManager();
+			fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
+
+			// update selected item and title, then close the drawer
+			drawerList.setItemChecked(position, true);
+			drawerList.setSelection(position);
+			setTitle(navMenuTitles[position]);
+			drawerLayout.closeDrawer(drawerList);
+		} else {
+			Log.d("MainActivity", "navigation drawer fragment error");
+		}    
+	}
+
 	private String convertDay(int pos)
 	{
 		switch(pos)
@@ -257,7 +256,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	{
 		return tabs[getNumDay()];
 	}
-	
+
 	private int getNumDay()
 	{
 		Calendar cal = Calendar.getInstance();
@@ -274,7 +273,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		default: return 0;
 		}
 	}
-	
+
 
 	@Override
 	public void onTabSelected(Tab tab, FragmentTransaction ft) 

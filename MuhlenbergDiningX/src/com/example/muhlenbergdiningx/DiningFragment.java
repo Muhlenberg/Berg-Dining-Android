@@ -85,11 +85,11 @@ public class DiningFragment extends Fragment implements OnClickListener, OnItemC
 	
 	private void weekdaySetup(View v)
 	{
-		meals = new ArrayList<TextView>(3);
-		adapters = new DiningGridAdapter[3];
-		stations = new ArrayList<ArrayList<DiningStation>>();
-		gv = (GridView) v.findViewById(R.id.weekdayGridView);
-		itemView = (TextView) v.findViewById(R.id.weekdayItemView);
+		meals 		= new ArrayList<TextView>(3);
+		adapters 	= new DiningGridAdapter[3];
+		stations 	= new ArrayList<ArrayList<DiningStation>>();
+		gv 			= (GridView) v.findViewById(R.id.weekdayGridView);
+		itemView 	= (TextView) v.findViewById(R.id.weekdayItemView);
 		itemView.setMovementMethod(new ScrollingMovementMethod());
 		
 		meals.add((TextView) v.findViewById(R.id.weekday_breakfast));
@@ -121,11 +121,11 @@ public class DiningFragment extends Fragment implements OnClickListener, OnItemC
 	
 	private void weekendSetup(View v)
 	{
-		meals = new ArrayList<TextView>(2);
-		adapters = new DiningGridAdapter[2];
-		stations = new ArrayList<ArrayList<DiningStation>>();
-		gv = (GridView) v.findViewById(R.id.weekendGridView);
-		itemView = (TextView) v.findViewById(R.id.weekendItemView);
+		meals 		= new ArrayList<TextView>(2);
+		adapters 	= new DiningGridAdapter[2];
+		stations 	= new ArrayList<ArrayList<DiningStation>>();
+		gv 			= (GridView) v.findViewById(R.id.weekendGridView);
+		itemView 	= (TextView) v.findViewById(R.id.weekendItemView);
 		itemView.setMovementMethod(new ScrollingMovementMethod());
 
 		meals.add((TextView) v.findViewById(R.id.weekend_brunch));
@@ -137,6 +137,7 @@ public class DiningFragment extends Fragment implements OnClickListener, OnItemC
 		for(int i=0;i<meals.size();i++)
 		{
 			meals.get(i).setText(parser.getLocations().get(location).get(day).get(i).getName());
+			meals.get(0).setTag(meals.get(0).getText());
 			meals.get(i).setOnClickListener(this);
 			
 			for(int j=0;j<parser.getLocations().get(location).get(day).get(i).size();j++)

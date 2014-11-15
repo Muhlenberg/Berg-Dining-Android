@@ -17,10 +17,11 @@ public final class R {
         public static final int abc_slide_out_top=0x7f040005;
     }
     public static final class array {
-        public static final int nav_drawer_icons=0x7f0c0001;
+        public static final int nav_drawer_icons=0x7f0c0002;
         /**  Nav Drawer Menu Items 
          */
         public static final int nav_drawer_items=0x7f0c0000;
+        public static final int spinner_items=0x7f0c0001;
     }
     public static final class attr {
         /**  Custom divider drawable to use for elements in the action bar. 
@@ -1094,10 +1095,11 @@ containing a value of this type.
         public static final int ic_drawer=0x7f02005c;
         public static final int ic_launcher=0x7f02005d;
         public static final int muhlenberg_logo=0x7f02005e;
-        public static final int question_icon=0x7f02005f;
-        public static final int selector_tab_text=0x7f020060;
-        public static final int stacked_background=0x7f020061;
-        public static final int tab_bar_background=0x7f020062;
+        public static final int phone_icon=0x7f02005f;
+        public static final int question_icon=0x7f020060;
+        public static final int selector_tab_text=0x7f020061;
+        public static final int stacked_background=0x7f020062;
+        public static final int tab_bar_background=0x7f020063;
     }
     public static final class id {
         public static final int action_bar=0x7f05001c;
@@ -1111,7 +1113,7 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f050016;
         public static final int action_menu_presenter=0x7f050017;
         public static final int action_mode_close_button=0x7f050024;
-        public static final int action_settings=0x7f05004d;
+        public static final int action_settings=0x7f05004e;
         public static final int activity_chooser_view_content=0x7f050025;
         public static final int always=0x7f05000b;
         public static final int beginning=0x7f050011;
@@ -1157,6 +1159,7 @@ containing a value of this type.
         public static final int showCustom=0x7f050007;
         public static final int showHome=0x7f050004;
         public static final int showTitle=0x7f050006;
+        public static final int spinner=0x7f050041;
         public static final int split_action_bar=0x7f05001e;
         public static final int submit_area=0x7f050039;
         public static final int tabMode=0x7f050002;
@@ -1165,18 +1168,18 @@ containing a value of this type.
         public static final int up=0x7f050021;
         public static final int useLogo=0x7f050003;
         public static final int viewPager=0x7f05003e;
-        public static final int weekdayGridView=0x7f050046;
-        public static final int weekdayItemView=0x7f050047;
-        public static final int weekdayMealContainer=0x7f050042;
-        public static final int weekday_breakfast=0x7f050043;
-        public static final int weekday_dinner=0x7f050045;
-        public static final int weekday_layout=0x7f050041;
-        public static final int weekday_lunch=0x7f050044;
-        public static final int weekendGridView=0x7f05004b;
-        public static final int weekendItemView=0x7f05004c;
-        public static final int weekendMealContainer=0x7f050048;
-        public static final int weekend_brunch=0x7f050049;
-        public static final int weekend_dinner=0x7f05004a;
+        public static final int weekdayGridView=0x7f050047;
+        public static final int weekdayItemView=0x7f050048;
+        public static final int weekdayMealContainer=0x7f050043;
+        public static final int weekday_breakfast=0x7f050044;
+        public static final int weekday_dinner=0x7f050046;
+        public static final int weekday_layout=0x7f050042;
+        public static final int weekday_lunch=0x7f050045;
+        public static final int weekendGridView=0x7f05004c;
+        public static final int weekendItemView=0x7f05004d;
+        public static final int weekendMealContainer=0x7f050049;
+        public static final int weekend_brunch=0x7f05004a;
+        public static final int weekend_dinner=0x7f05004b;
         public static final int withText=0x7f05000c;
     }
     public static final class integer {
@@ -1233,9 +1236,10 @@ containing a value of this type.
         public static final int dining_periodbutton=0x7f030019;
         public static final int dininggridbutton=0x7f03001a;
         public static final int drawer_list_item=0x7f03001b;
-        public static final int support_simple_spinner_dropdown_item=0x7f03001c;
-        public static final int weekday_fragment=0x7f03001d;
-        public static final int weekend_fragment=0x7f03001e;
+        public static final int javajoes=0x7f03001c;
+        public static final int support_simple_spinner_dropdown_item=0x7f03001d;
+        public static final int weekday_fragment=0x7f03001e;
+        public static final int weekend_fragment=0x7f03001f;
     }
     public static final class menu {
         public static final int main=0x7f0d0000;
@@ -1290,13 +1294,9 @@ containing a value of this type.
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
 
+
+
     
-
-            Theme customizations available in newer API levels can go in
-            res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
-
-        
 
         Base application theme for API 11+. This theme completely replaces
         AppBaseTheme from res/values/styles.xml on API 11+ devices.
@@ -1306,14 +1306,19 @@ containing a value of this type.
         Base application theme for API 14+. This theme completely replaces
         AppBaseTheme from BOTH res/values/styles.xml and
         res/values-v11/styles.xml on API 14+ devices.
+
     
- API 14 theme customizations can go here. 
          */
         public static final int AppBaseTheme=0x7f0b008b;
         /**  Application theme. 
- All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f0b008c;
+        public static final int DiningSpinnerItem=0x7f0b008f;
+        public static final int DiningTextAppearanceSpinnerItem=0x7f0b0090;
+        public static final int MyActionBar=0x7f0b008e;
+        public static final int MyTheme_ActionBar_TabText=0x7f0b0091;
+        public static final int MyTheme_ActionBar_TabView=0x7f0b0092;
+        public static final int MyTheme_ActionBar_TitleTextStyle=0x7f0b0093;
         /**  Mimic text appearance in select_dialog_item.xml 
          */
         public static final int TextAppearance_AppCompat_Base_CompactMenu_Dialog=0x7f0b0063;

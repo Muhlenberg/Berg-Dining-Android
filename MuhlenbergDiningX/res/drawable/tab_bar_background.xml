@@ -6,7 +6,7 @@
         <!-- Bottom indicator color for the UNSELECTED tab state -->
         <item android:top="-5dp" android:left="-5dp" android:right="-5dp">
              <shape android:shape="rectangle">
-                 <stroke android:color="#808080" android:width="2dp"/>
+                 <stroke android:color="#ded5b3" android:width="2dp"/>
              </shape>
         </item>
       </layer-list>
@@ -17,13 +17,13 @@
        <!-- Tab background color for the SELECTED tab state -->
        <item>
           <shape>
-              <solid android:color="#ff0000"/>
+              <solid android:color="#cc092f"/>
           </shape>
        </item>
        <!-- Bottom indicator color for the SELECTED tab state -->
        <item android:top="-5dp" android:left="-5dp" android:right="-5dp">
            <shape android:shape="rectangle">
-               <stroke android:color="#ded5b3" android:width="2dp"/>
+               <stroke android:color="#fff" android:width="2dp"/>
            </shape>
        </item>
     </layer-list>
