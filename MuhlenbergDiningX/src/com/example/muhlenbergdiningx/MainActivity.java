@@ -36,8 +36,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.example.muhlenbergdiningx.DiningXmlParser.DiningLocation;
+
+import fragments.ContactsFragment;
+import fragments.DiningFragment;
+import fragments.HoursFragment;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener, OnPageChangeListener
 {
@@ -118,9 +124,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		adapter = new DiningNavigationAdapter(getApplicationContext(), navDrawerItems);
 		drawerList.setAdapter(adapter);
 
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setHomeButtonEnabled(true);
-
 		drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer, R.string.app_name, R.string.app_name)
 		{
 			public void onDrawerClosed(View view) {
@@ -135,12 +138,15 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 				invalidateOptionsMenu();
 			}
 		};
-
 		drawerLayout.setDrawerListener(drawerToggle);
-
-		if (savedInstanceState == null) {
-			displayView(0);
-		}
+		drawerList.setOnItemClickListener(new NavMenuListener());
+		
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setHomeButtonEnabled(true);
+		
+//		if (savedInstanceState == null) {
+//			displayView(0);
+//		}
 
 		//get some display metrics for use in gridview
 		DisplayMetrics metrics = new DisplayMetrics();
@@ -151,6 +157,15 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	}
 
+	private class NavMenuListener implements OnItemClickListener
+	{
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			displayView(position);
+		}
+
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -212,12 +227,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		// update the main content by replacing fragments
 		Fragment fragment = null;
 		switch (position) {
-		case 0: DiningFragment.newInstance(getNumDay(), parser);
-		break;
-		case 1: //hours
-			break;
-		case 2: //contact
-			break;
+		case 0: fragment = DiningFragment.newInstance(getNumDay(), parser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS); break;
+		case 1: fragment = HoursFragment.newInstance(parser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); break;
+		case 2: fragment = ContactsFragment.newInstance(parser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); break;
 		case 3: //help
 			break;
 		default:

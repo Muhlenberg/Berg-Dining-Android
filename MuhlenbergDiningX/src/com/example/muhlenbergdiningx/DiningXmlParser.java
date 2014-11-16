@@ -16,6 +16,8 @@ import android.util.Xml;
 public class DiningXmlParser implements Parcelable
 {
 	private ArrayList<DiningLocation> locations = new ArrayList<DiningLocation>();
+	private ArrayList<DiningContacts> contacts = new ArrayList<DiningContacts>();
+	
 	public DiningXmlParser(InputStream is) throws XmlPullParserException, IOException
 	{
 		XmlPullParser parser = Xml.newPullParser();
@@ -28,6 +30,9 @@ public class DiningXmlParser implements Parcelable
 		DiningPeriod period = null;
 		DiningStation station = null;
 		DiningItem item = null;
+		
+		DiningHours hours = null;
+		DiningContacts contact = null;
 		
 		int eventType;
 		while((eventType = parser.getEventType()) != XmlPullParser.END_DOCUMENT)
@@ -44,7 +49,20 @@ public class DiningXmlParser implements Parcelable
 					station = new DiningStation(parser.getAttributeValue(0));
 				else if(parser.getName().equalsIgnoreCase("item"))
 					item = new DiningItem(parser.getAttributeValue(0));
+				
+				else if(parser.getName().equalsIgnoreCase("contact"))
+					contact = new DiningContacts();
+				else if(parser.getName().equalsIgnoreCase("name"))
+					contact.setName(parser.nextText()); //reads text AFTER start tag
+				else if(parser.getName().equalsIgnoreCase("title"))
+					contact.setTitle(parser.nextText());
+				else if(parser.getName().equalsIgnoreCase("email"))
+					contact.setEmail(parser.nextText());
 			}
+			
+			if(eventType == XmlPullParser.CDSECT)
+				hours = new DiningHours(parser.getText());
+			
 			else if(eventType == XmlPullParser.END_TAG)
 			{
 				if(parser.getName().equalsIgnoreCase("item"))
@@ -57,9 +75,12 @@ public class DiningXmlParser implements Parcelable
 					location.add(day);
 				else if(parser.getName().equalsIgnoreCase("location"))
 					locations.add(location);
+				else if(parser.getName().equalsIgnoreCase("hours"))
+					location.setHours(hours);
+				else if(parser.getName().equalsIgnoreCase("contact"))
+					contacts.add(contact);
 			}
-			
-			parser.next();
+			parser.nextToken();
 		}
 		
 		is.close();
@@ -88,6 +109,7 @@ public class DiningXmlParser implements Parcelable
 		private String name;
 		private ArrayList<DiningDay> days;
 		
+		private DiningHours hours;
 		public DiningLocation(String name)
 		{
 			this.name = name;
@@ -103,7 +125,16 @@ public class DiningXmlParser implements Parcelable
 		{
 			return days.get(day);
 		}
+
+		public void setHours(DiningHours h)
+		{
+			hours = h;
+		}
 		
+		public DiningHours getHours()
+		{
+			return hours;
+		}
 		public String getName()
 		{
 			return name;
@@ -229,11 +260,76 @@ public class DiningXmlParser implements Parcelable
 		}
 	}
 	
+	public static class DiningHours
+	{
+		private String hours;
+		public DiningHours(String hours)
+		{
+			this.hours=hours;
+		}
+		
+		public String getHours()
+		{
+			return hours;
+		}
+	}
+	
+	public static class DiningContacts
+	{
+		private String name, title, email;
+		
+		public DiningContacts()
+		{
+			name="name";
+			title="title";
+			email="email";
+		}
+		
+		public DiningContacts(String name, String title, String email)
+		{
+			this.name = name;
+			this.title = title;
+			this.email = email;
+		}
+		
+		public String getName()
+		{
+			return name;
+		}
+		
+		public String getTitle()
+		{
+			return title;
+		}
+		
+		public String getEmail()
+		{
+			return email;
+		}
+		
+		public void setName(String n)
+		{
+			name=n;
+		}
+		public void setTitle(String t)
+		{
+			title=t;
+		}
+		public void setEmail(String e)
+		{
+			email=e;
+		}
+	}
+	
 	public ArrayList<DiningLocation> getLocations()
 	{
 		return locations;
 	}
-	
+
+	public ArrayList<DiningContacts> getContacts()
+	{
+		return contacts;
+	}
 	public int getLocationCount()
 	{
 		return locations.size();
