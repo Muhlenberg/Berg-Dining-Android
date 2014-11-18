@@ -37,6 +37,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ListView;
+import android.widget.Toast;
 import fragments.AboutFragment;
 import fragments.ContactsFragment;
 import fragments.DiningFragment;
@@ -64,23 +65,24 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	private CharSequence title;
 	private String[] tabs = {"Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"};
-	
+	private boolean firstPass = true;
+
 	public DiningXmlParser parser;
 	public MiscParser mParser;
 	public GQParser gParser;
-	
+
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		title = "Muhlenberg Dining";
 
 		//make parser and pass it to other things
 		makeParsers();
-		
+
 		//viewpager
 		viewPager = (ViewPager) findViewById(R.id.viewPager);
 		pagerAdapter = new DiningPagerAdapter(getSupportFragmentManager(), parser);
@@ -136,10 +138,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		drawerLayout.setDrawerListener(drawerToggle);
 		drawerList.setOnItemClickListener(new NavMenuListener());
 
-		
+
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
-		
+
 		//get some display metrics for use in gridview
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -157,7 +159,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			displayView(position);
 		}
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -218,16 +220,18 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	private void displayView(int position) {
 		// update the main content by replacing fragments
 		Fragment fragment = null;
-		switch (position) {
+		switch (position) 
+		{
+		//nav drawer, ignore 0 because spinner consumes click
 		case 1: fragment = HoursFragment.newInstance(parser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 		 break;
 		case 2: fragment = ContactsFragment.newInstance(parser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 	 break;
 		case 3: fragment = AboutFragment.newInstance(); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);			 break; 
-		case 4: fragment = DiningFragment.newInstance(getNumDay(), parser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS); break;
-		case 5: fragment = GQFragment.newInstance(gParser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 	 	 break;
-		case 6: fragment = LSCCafeFragment.newInstance(mParser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 	 break;
-		case 7: fragment = JavaJoeFragment.newInstance(mParser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 	 break;
-		default:
-			break;
+		//spinner, passed to nav drawer listener  
+		case 5: fragment = DiningFragment.newInstance(getNumDay(), parser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS); break;
+		case 6: fragment = GQFragment.newInstance(gParser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 	 	 break;
+		case 7: fragment = LSCCafeFragment.newInstance(mParser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 	 break;
+		case 8: fragment = JavaJoeFragment.newInstance(mParser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 	 break;
+		default: break;
 		}
 
 		if (fragment != null) {
@@ -316,23 +320,20 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	{
 		actionBar.selectTab(actionBar.getTabAt(pos));
 	}
-	
+
 
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) 
 	{
-		if(position!=0)
-			displayView(position+4);
-			
-		parent.setSelection(position);
+		displayView(position+4);
 	}
 
 	@Override
 	public void onNothingSelected(AdapterView<?> parent) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	//for some reason i could not pass the same stream to all the parser (i assume asynchronous thread activity caused issues)
 	public void makeParsers()
 	{
@@ -355,7 +356,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		} 
 		catch(IOException ioe) {ioe.printStackTrace(); }
 		catch(XmlPullParserException e) {e.printStackTrace(); }
-		
+
 		try
 		{
 			is = getAssets().open("mDining.xml");
@@ -364,5 +365,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		catch(IOException ioe) {ioe.printStackTrace(); }
 		catch(XmlPullParserException e) {e.printStackTrace(); }
 	}
-	
+
+	public static int getSpinnerSelection()
+	{
+		return spinnerSelection;
+	}
 }
