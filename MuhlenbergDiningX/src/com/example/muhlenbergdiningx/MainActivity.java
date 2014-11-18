@@ -10,6 +10,9 @@ import navdrawer.DiningNavigationAdapter;
 
 import org.xmlpull.v1.XmlPullParserException;
 
+import parsers.DiningXmlParser;
+import parsers.GQParser;
+import parsers.MiscParser;
 import viewpager.DiningPagerAdapter;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
@@ -17,8 +20,6 @@ import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -33,28 +34,27 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
-
-import com.example.muhlenbergdiningx.DiningXmlParser.DiningLocation;
-
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ListView;
+import fragments.AboutFragment;
 import fragments.ContactsFragment;
 import fragments.DiningFragment;
+import fragments.GQFragment;
 import fragments.HoursFragment;
+import fragments.JavaJoeFragment;
+import fragments.LSCCafeFragment;
 
-public class MainActivity extends FragmentActivity implements ActionBar.TabListener, OnPageChangeListener
+public class MainActivity extends FragmentActivity implements ActionBar.TabListener, OnPageChangeListener, OnItemSelectedListener
 {
-	public static int screenWidth, screenHeight;
+	public static int screenWidth, screenHeight, spinnerSelection=-1;
 
 	private ViewPager viewPager;
 	private DiningPagerAdapter pagerAdapter;
 	private ActionBar actionBar; 
 
 	private DrawerLayout drawerLayout;
-	private ListView drawerList;
+	public ListView drawerList;
 	private ActionBarDrawerToggle drawerToggle;
 
 	private String[] navMenuTitles;
@@ -64,28 +64,23 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	private CharSequence title;
 	private String[] tabs = {"Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"};
-	private DiningXmlParser parser;
-
+	
+	public DiningXmlParser parser;
+	public MiscParser mParser;
+	public GQParser gParser;
+	
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		
 		title = "Muhlenberg Dining";
 
 		//make parser and pass it to other things
-		parser = null;
-		InputStream is = null;
-		try
-		{
-			is = getAssets().open("mDining.xml");
-			parser = new DiningXmlParser(is);
-		} 
-		catch(IOException ioe) {ioe.printStackTrace(); }
-		catch(XmlPullParserException e) {e.printStackTrace(); }
-
+		makeParsers();
+		
 		//viewpager
 		viewPager = (ViewPager) findViewById(R.id.viewPager);
 		pagerAdapter = new DiningPagerAdapter(getSupportFragmentManager(), parser);
@@ -121,7 +116,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 		navMenuIcons.recycle();
 
-		adapter = new DiningNavigationAdapter(getApplicationContext(), navDrawerItems);
+		adapter = new DiningNavigationAdapter(this, navDrawerItems, parser, mParser);
 		drawerList.setAdapter(adapter);
 
 		drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer, R.string.app_name, R.string.app_name)
@@ -140,14 +135,11 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		};
 		drawerLayout.setDrawerListener(drawerToggle);
 		drawerList.setOnItemClickListener(new NavMenuListener());
+
 		
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 		
-//		if (savedInstanceState == null) {
-//			displayView(0);
-//		}
-
 		//get some display metrics for use in gridview
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -157,13 +149,13 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	}
 
-	private class NavMenuListener implements OnItemClickListener
+	public class NavMenuListener implements OnItemClickListener
 	{
 		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id) 
+		{
 			displayView(position);
 		}
-
 	}
 	
 	@Override
@@ -218,7 +210,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	public void onBackPressed()
 	{
 		if(viewPager.getCurrentItem() == 0)
-			super.onBackPressed();
+			viewPager.setCurrentItem(pagerAdapter.getCount()-1);
 		else
 			viewPager.setCurrentItem(viewPager.getCurrentItem()-1);
 	}
@@ -227,11 +219,13 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		// update the main content by replacing fragments
 		Fragment fragment = null;
 		switch (position) {
-		case 0: fragment = DiningFragment.newInstance(getNumDay(), parser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS); break;
-		case 1: fragment = HoursFragment.newInstance(parser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); break;
-		case 2: fragment = ContactsFragment.newInstance(parser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); break;
-		case 3: //help
-			break;
+		case 1: fragment = HoursFragment.newInstance(parser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 		 break;
+		case 2: fragment = ContactsFragment.newInstance(parser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 	 break;
+		case 3: fragment = AboutFragment.newInstance(); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);			 break; 
+		case 4: fragment = DiningFragment.newInstance(getNumDay(), parser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS); break;
+		case 5: fragment = GQFragment.newInstance(gParser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 	 	 break;
+		case 6: fragment = LSCCafeFragment.newInstance(mParser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 	 break;
+		case 7: fragment = JavaJoeFragment.newInstance(mParser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 	 break;
 		default:
 			break;
 		}
@@ -321,6 +315,54 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	public void onPageSelected(int pos) 
 	{
 		actionBar.selectTab(actionBar.getTabAt(pos));
-
 	}
+	
+
+	@Override
+	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) 
+	{
+		if(position!=0)
+			displayView(position+4);
+			
+		parent.setSelection(position);
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> parent) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	//for some reason i could not pass the same stream to all the parser (i assume asynchronous thread activity caused issues)
+	public void makeParsers()
+	{
+		parser = null;
+		mParser= null;
+		gParser = null;
+		InputStream is = null;
+		try
+		{
+			is = getAssets().open("mDining.xml");
+			parser = new DiningXmlParser(is);
+		} 
+		catch(IOException ioe) {ioe.printStackTrace(); }
+		catch(XmlPullParserException e) {e.printStackTrace(); }
+
+		try
+		{
+			is = getAssets().open("mDining.xml");
+			mParser = new MiscParser(is);
+		} 
+		catch(IOException ioe) {ioe.printStackTrace(); }
+		catch(XmlPullParserException e) {e.printStackTrace(); }
+		
+		try
+		{
+			is = getAssets().open("mDining.xml");
+			gParser = new GQParser(is);
+		} 
+		catch(IOException ioe) {ioe.printStackTrace(); }
+		catch(XmlPullParserException e) {e.printStackTrace(); }
+	}
+	
 }

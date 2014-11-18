@@ -24,6 +24,9 @@
             style="@style/diningPeriodStyle"
             android:layout_weight="0.33"/>"
     </LinearLayout>
+    <View 
+        style="@style/Divider"
+        android:layout_below="@id/weekdayMealContainer" />
     
     <GridView 
         android:id="@+id/weekdayGridView"

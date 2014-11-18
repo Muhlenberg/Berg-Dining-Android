@@ -2,6 +2,8 @@ package fragments;
 
 import java.util.ArrayList;
 
+import parsers.DiningXmlParser;
+import parsers.DiningXmlParser.DiningContacts;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
@@ -12,8 +14,6 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import com.example.muhlenbergdiningx.ContactsGridAdapter;
-import com.example.muhlenbergdiningx.DiningXmlParser;
-import com.example.muhlenbergdiningx.DiningXmlParser.DiningContacts;
 import com.example.muhlenbergdiningx.R;
 
 public class ContactsFragment extends Fragment

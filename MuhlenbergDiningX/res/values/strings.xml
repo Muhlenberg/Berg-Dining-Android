@@ -10,12 +10,16 @@
         <item>Locations</item>
         <item>Hours</item>
         <item>Contact</item>
-        <item>Help</item>
+        <item>About</item>
+		<item>Wood Dining</item>
+        <item>GQ</item>
+        <item>LSC Cafe</item>
+        <item>Java Joes</item>
     </string-array>
 
     <string-array name="spinner_items">
         <item>Wood Dining</item>
-        <item>Mule Express</item>
+        <item>GQ</item>
         <item>LSC Cafe</item>
         <item>Java Joes</item>
     </string-array>

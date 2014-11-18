@@ -2,13 +2,15 @@
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
     <style name="AppBaseTheme" parent="Theme.AppCompat.Light">
+
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.        -->
+            backward-compatibility can go here.
+        -->
         <item name="android:actionBarStyle">@style/MyActionBar</item>
     </style>
 
@@ -41,7 +43,7 @@
     </style>
 
     <style name="DiningTextAppearanceSpinnerItem" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
-        <item name="android:textColor">#cc092f</item>
+        <item name="android:textColor">#fff</item>
     </style>
 
     <style name="MyTheme.ActionBar.TabText" parent="android:style/Widget.Holo.ActionBar.TabText">
@@ -50,6 +52,12 @@
 
     <style name="MyTheme.ActionBar.TabView" parent="android:style/Widget.Holo.ActionBar.TabView">
         <item name="android:background">@drawable/tab_bar_background</item>
+    </style>
+
+    <style name="Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">3dp</item>
+        <item name="android:background">@drawable/divider_solid</item>
     </style>
 
 </resources>

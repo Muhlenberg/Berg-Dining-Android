@@ -13,6 +13,12 @@ public class DiningNavItem
 		isSpinner = false;
 	}
 	
+	public DiningNavItem(int icon)
+	{
+		this.icon=icon;
+		title=null;
+		isSpinner=false;
+	}
 	public DiningNavItem(boolean isSpinner, int icon)
 	{
 		title = null;

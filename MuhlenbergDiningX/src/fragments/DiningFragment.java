@@ -6,12 +6,13 @@ import java.util.ArrayList;
 
 import org.xmlpull.v1.XmlPullParserException;
 
+import parsers.DiningXmlParser;
+import parsers.DiningXmlParser.DiningStation;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,17 +20,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.muhlenbergdiningx.DiningGridAdapter;
-import com.example.muhlenbergdiningx.DiningXmlParser;
 import com.example.muhlenbergdiningx.R;
-import com.example.muhlenbergdiningx.DiningXmlParser.DiningStation;
-import com.example.muhlenbergdiningx.R.color;
-import com.example.muhlenbergdiningx.R.drawable;
-import com.example.muhlenbergdiningx.R.id;
-import com.example.muhlenbergdiningx.R.layout;
 
 public class DiningFragment extends Fragment implements OnClickListener, OnItemClickListener
 {
@@ -211,8 +207,11 @@ public class DiningFragment extends Fragment implements OnClickListener, OnItemC
 		catch(XmlPullParserException e) {e.printStackTrace(); }
 		
 		itemView.setText("");
+		RelativeLayout rl = (RelativeLayout) getActivity().findViewById(R.id.weekday_layout);
 		for(int i=0;i<parser.getLocations().get(0).get(day).get(mealIndex).get(position).size();i++)
+		{
 			itemView.append(parser.getLocations().get(0).get(day).get(mealIndex).get(position).get(i).getName()+"\n");
+		}
 		
 		gv.setVisibility(View.GONE);
 		itemView.setVisibility(View.VISIBLE);

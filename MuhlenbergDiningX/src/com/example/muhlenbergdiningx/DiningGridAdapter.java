@@ -2,14 +2,13 @@ package com.example.muhlenbergdiningx;
 
 import java.util.ArrayList;
 
+import parsers.DiningXmlParser.DiningStation;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
-import com.example.muhlenbergdiningx.DiningXmlParser.DiningStation;
 
 public class DiningGridAdapter extends BaseAdapter
 {

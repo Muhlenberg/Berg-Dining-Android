@@ -36,8 +36,8 @@
         android:layout_weight="0.7"
         android:background="#111"
         android:gravity="center"
-        android:dropDownSelector="#cc092f"
+        android:dropDownSelector="#ded5b3"
         android:spinnerMode="dropdown"
         android:visibility="gone" />
-
+    
 </LinearLayout>

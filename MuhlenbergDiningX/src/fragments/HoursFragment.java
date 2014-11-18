@@ -1,5 +1,7 @@
 package fragments;
 
+import parsers.DiningXmlParser;
+import parsers.DiningXmlParser.DiningHours;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
@@ -11,9 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.muhlenbergdiningx.DiningXmlParser;
 import com.example.muhlenbergdiningx.R;
-import com.example.muhlenbergdiningx.DiningXmlParser.DiningHours;
 import com.example.muhlenbergdiningx.R.color;
 import com.example.muhlenbergdiningx.R.id;
 import com.example.muhlenbergdiningx.R.layout;
