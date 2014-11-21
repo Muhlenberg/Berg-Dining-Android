@@ -5,43 +5,72 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <!-- meals tab group -->
+
     <LinearLayout
         android:id="@+id/weekdayMealContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:orientation="horizontal">
-        <TextView 
+        android:orientation="horizontal" >
+
+        <TextView
             android:id="@+id/weekday_breakfast"
             style="@style/diningPeriodStyle"
-            android:layout_weight="0.33"/>
-        <TextView 
+            android:layout_weight="0.33" />
+
+        <TextView
             android:id="@+id/weekday_lunch"
             style="@style/diningPeriodStyle"
-            android:layout_weight="0.33"/>
-        <TextView 
+            android:layout_weight="0.33" />
+
+        <TextView
             android:id="@+id/weekday_dinner"
             style="@style/diningPeriodStyle"
-            android:layout_weight="0.33"/>"
+            android:layout_weight="0.33" />
     </LinearLayout>
-    <View 
+
+    <!-- View that is just a line to serve as divider between meals and stations -->
+
+    <View
         style="@style/Divider"
+        android:id="@+id/weekdayDivider"
         android:layout_below="@id/weekdayMealContainer" />
-    
-    <GridView 
+
+    <GridView
         android:id="@+id/weekdayGridView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/weekdayDivider"
         android:layout_marginTop="2dp"
-        android:numColumns="2"
-        android:layout_below="@id/weekdayMealContainer"/>
-    
-    <TextView 
-        android:id="@+id/weekdayItemView"
+        android:numColumns="2" />
+
+    <!-- View All -->
+
+    <TextView
+        android:id="@+id/weekdayViewAll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/weekdayMealContainer"
-        android:textSize="24sp"
-        android:scrollbars="vertical"
-        android:visibility="gone"/>
+        android:layout_alignParentBottom="true"
+        android:background="#8c8f91"
+        android:gravity="center"
+        android:text="View All"
+        android:textColor="#fff"
+        android:textSize="24sp" />
+
+    <!-- TextView to display items in each station -->
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:layout_below="@id/weekdayMealContainer">
+
+        <TextView
+            android:id="@+id/weekdayItemView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:visibility="gone" />
+    </ScrollView>
+
 </RelativeLayout>

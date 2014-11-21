@@ -8,29 +8,53 @@
         android:id="@+id/weekendMealContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView 
+        android:orientation="horizontal" >
+
+        <TextView
             android:id="@+id/weekend_brunch"
             style="@style/diningPeriodStyle"
-            android:layout_weight="0.5"/>
-        <TextView 
+            android:layout_weight="0.5" />
+
+        <TextView
             android:id="@+id/weekend_dinner"
             style="@style/diningPeriodStyle"
-            android:layout_weight="0.5"/>
+            android:layout_weight="0.5" />
     </LinearLayout>
-    
-    <GridView 
+
+    <View
+        style="@style/Divider"
+        android:id="@+id/weekendDivider"
+        android:layout_below="@id/weekendMealContainer" />
+
+    <GridView
         android:id="@+id/weekendGridView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:numColumns="2"
-        android:layout_below="@id/weekendMealContainer"/>
+        android:layout_below="@id/weekendDivider"
+        android:numColumns="2" />
     
+    <!-- View All   -->
     <TextView 
-        android:id="@+id/weekendItemView"
+        android:id="@+id/weekendViewAll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/weekendMealContainer"
+        android:layout_alignParentBottom="true"
+        android:background="#8c8f91"
+        android:gravity="center"
         android:textSize="24sp"
-        android:visibility="gone"/>
+        android:textColor="#fff"
+        android:text="View All"/>
+        
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:layout_below="@id/weekendMealContainer">
+
+        <TextView
+            android:id="@+id/weekendItemView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:visibility="gone" />
+    </ScrollView>    
 </RelativeLayout>

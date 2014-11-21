@@ -37,18 +37,17 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ListView;
-import android.widget.Toast;
 import fragments.AboutFragment;
 import fragments.ContactsFragment;
-import fragments.DiningFragment;
 import fragments.GQFragment;
 import fragments.HoursFragment;
 import fragments.JavaJoeFragment;
 import fragments.LSCCafeFragment;
+import fragments.ViewPagerFragment;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener, OnPageChangeListener, OnItemSelectedListener
 {
-	public static int screenWidth, screenHeight, spinnerSelection=-1;
+	public static int screenWidth, screenHeight;
 
 	private ViewPager viewPager;
 	private DiningPagerAdapter pagerAdapter;
@@ -65,7 +64,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	private CharSequence title;
 	private String[] tabs = {"Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"};
-	private boolean firstPass = true;
 
 	public DiningXmlParser parser;
 	public MiscParser mParser;
@@ -84,11 +82,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		makeParsers();
 
 		//viewpager
-		viewPager = (ViewPager) findViewById(R.id.viewPager);
-		pagerAdapter = new DiningPagerAdapter(getSupportFragmentManager(), parser);
-		viewPager.setAdapter(pagerAdapter);
-		viewPager.setOnPageChangeListener(this);
-
+		Fragment frag = ViewPagerFragment.newInstance(parser);
+		viewPager = ((ViewPagerFragment) frag).getViewPager();
+		getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, frag).commit();
+		
 		//actionbar
 		actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -215,11 +212,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			viewPager.setCurrentItem(pagerAdapter.getCount()-1);
 		else
 			viewPager.setCurrentItem(viewPager.getCurrentItem()-1);
+		
+		
 	}
 
 	private void displayView(int position) {
 		// update the main content by replacing fragments
 		Fragment fragment = null;
+
 		switch (position) 
 		{
 		//nav drawer, ignore 0 because spinner consumes click
@@ -227,25 +227,33 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		case 2: fragment = ContactsFragment.newInstance(parser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 	 break;
 		case 3: fragment = AboutFragment.newInstance(); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);			 break; 
 		//spinner, passed to nav drawer listener  
-		case 5: fragment = DiningFragment.newInstance(getNumDay(), parser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS); break;
+		case 4: return;
+		//current issue: viewpager gets replaced by fragment, then how do i get it back?
+		//possible solution: put viewpager in fragment, replace said fragment back and forth
+		case 5: fragment = ViewPagerFragment.newInstance(parser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);break;
 		case 6: fragment = GQFragment.newInstance(gParser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 	 	 break;
 		case 7: fragment = LSCCafeFragment.newInstance(mParser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 	 break;
 		case 8: fragment = JavaJoeFragment.newInstance(mParser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 	 break;
-		default: break;
+		default: Log.d("nav drawer", "position out of range " + position); break;
 		}
 
-		if (fragment != null) {
+		if(position==5)
+		{
+			
+		}
+		if (fragment != null) 
+		{
 			FragmentManager fragmentManager = getSupportFragmentManager();
 			fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
-
-			// update selected item and title, then close the drawer
-			drawerList.setItemChecked(position, true);
-			drawerList.setSelection(position);
-			setTitle(navMenuTitles[position]);
-			drawerLayout.closeDrawer(drawerList);
-		} else {
+		} 
+		else 
 			Log.d("MainActivity", "navigation drawer fragment error");
-		}    
+		
+		// update selected item and title, then close the drawer
+		drawerList.setItemChecked(position, true);
+		drawerList.setSelection(position);
+		setTitle(navMenuTitles[position]);
+		drawerLayout.closeDrawer(drawerList);
 	}
 
 	private String convertDay(int pos)
@@ -262,12 +270,13 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		default: return "Monday";
 		}
 	}
+	
 	private String getDay()
 	{
 		return tabs[getNumDay()];
 	}
 
-	private int getNumDay()
+	public static int getNumDay()
 	{
 		Calendar cal = Calendar.getInstance();
 		int currentDay = cal.get(Calendar.DAY_OF_WEEK);
@@ -288,8 +297,11 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	@Override
 	public void onTabSelected(Tab tab, FragmentTransaction ft) 
 	{
-		viewPager.setCurrentItem(tab.getPosition());
-		setTitle(convertDay(tab.getPosition()));
+		if(viewPager!=null)
+		{
+			viewPager.setCurrentItem(tab.getPosition());
+			setTitle(convertDay(tab.getPosition()));
+		}
 	}
 
 	@Override
@@ -330,11 +342,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	@Override
 	public void onNothingSelected(AdapterView<?> parent) {
-		// TODO Auto-generated method stub
 
 	}
 
-	//for some reason i could not pass the same stream to all the parser (i assume asynchronous thread activity caused issues)
+	//should we be using BufferedInputStream?
 	public void makeParsers()
 	{
 		parser = null;
@@ -364,10 +375,5 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		} 
 		catch(IOException ioe) {ioe.printStackTrace(); }
 		catch(XmlPullParserException e) {e.printStackTrace(); }
-	}
-
-	public static int getSpinnerSelection()
-	{
-		return spinnerSelection;
 	}
 }

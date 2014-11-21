@@ -12,7 +12,6 @@ import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,8 +19,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
-import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.example.muhlenbergdiningx.DiningGridAdapter;
@@ -36,7 +33,7 @@ public class DiningFragment extends Fragment implements OnClickListener, OnItemC
 	private ArrayList<ArrayList<DiningStation>> stations;
 	private ArrayList<TextView> meals;
 	private DiningGridAdapter[] adapters;
-	private TextView itemView;
+	private TextView itemView, viewAll;
 	
 	private DiningXmlParser parser;
 	
@@ -90,8 +87,8 @@ public class DiningFragment extends Fragment implements OnClickListener, OnItemC
 		adapters 	= new DiningGridAdapter[3];
 		stations 	= new ArrayList<ArrayList<DiningStation>>();
 		gv 			= (GridView) v.findViewById(R.id.weekdayGridView);
+		viewAll		= (TextView) v.findViewById(R.id.weekdayViewAll);
 		itemView 	= (TextView) v.findViewById(R.id.weekdayItemView);
-		itemView.setMovementMethod(new ScrollingMovementMethod());
 		
 		meals.add((TextView) v.findViewById(R.id.weekday_breakfast));
 		meals.add((TextView) v.findViewById(R.id.weekday_lunch));
@@ -118,6 +115,26 @@ public class DiningFragment extends Fragment implements OnClickListener, OnItemC
 		//add stations info to gridview
 		gv.setAdapter(adapters[0]);
 		gv.setOnItemClickListener(this);
+		
+		viewAll.setOnClickListener(new OnClickListener()
+		{
+
+			@Override
+			public void onClick(View v) 
+			{
+				gv.setVisibility(View.GONE);
+				viewAll.setVisibility(View.GONE);
+				itemView.setVisibility(View.VISIBLE);
+				
+				int size = parser.getLocations().get(0).get(day).get(mealIndex).size();
+				for(int i=0;i<size;i++)
+				{
+					for(int j=0;j<parser.getLocations().get(0).get(day).get(mealIndex).get(i).size();j++)
+						itemView.append(parser.getLocations().get(0).get(day).get(mealIndex).get(i).get(j).getName() + "\n");
+				}
+				meals.get(mealIndex).setText("Back");
+			}
+		});
 	}
 	
 	private void weekendSetup(View v)
@@ -126,8 +143,8 @@ public class DiningFragment extends Fragment implements OnClickListener, OnItemC
 		adapters 	= new DiningGridAdapter[2];
 		stations 	= new ArrayList<ArrayList<DiningStation>>();
 		gv 			= (GridView) v.findViewById(R.id.weekendGridView);
+		viewAll		= (TextView) v.findViewById(R.id.weekendViewAll);
 		itemView 	= (TextView) v.findViewById(R.id.weekendItemView);
-		itemView.setMovementMethod(new ScrollingMovementMethod());
 
 		meals.add((TextView) v.findViewById(R.id.weekend_brunch));
 		meals.add((TextView) v.findViewById(R.id.weekend_dinner));
@@ -138,7 +155,7 @@ public class DiningFragment extends Fragment implements OnClickListener, OnItemC
 		for(int i=0;i<meals.size();i++)
 		{
 			meals.get(i).setText(parser.getLocations().get(location).get(day).get(i).getName());
-			meals.get(0).setTag(meals.get(0).getText());
+			meals.get(i).setTag(meals.get(i).getText());
 			meals.get(i).setOnClickListener(this);
 			
 			for(int j=0;j<parser.getLocations().get(location).get(day).get(i).size();j++)
@@ -152,8 +169,30 @@ public class DiningFragment extends Fragment implements OnClickListener, OnItemC
 
 		gv.setAdapter(adapters[0]);
 		gv.setOnItemClickListener(this);
+		
+		viewAll.setOnClickListener(new OnClickListener()
+		{
+
+			@Override
+			public void onClick(View v) 
+			{
+				gv.setVisibility(View.GONE);
+				viewAll.setVisibility(View.GONE);
+				itemView.setVisibility(View.VISIBLE);
+				
+				int size = parser.getLocations().get(0).get(day).get(mealIndex).size();
+				for(int i=0;i<size;i++)
+				{
+					for(int j=0;j<parser.getLocations().get(0).get(day).get(mealIndex).get(i).size();j++)
+						itemView.append(parser.getLocations().get(0).get(day).get(mealIndex).get(i).get(j).getName() + "\n");
+				}
+				meals.get(mealIndex).setText("Back");
+			}
+			
+		});
 	}
 	
+	@SuppressWarnings("deprecation")
 	@SuppressLint("NewApi")
 	private void setBackgroundForView(View v, int backID)
 	{
@@ -188,6 +227,7 @@ public class DiningFragment extends Fragment implements OnClickListener, OnItemC
 		meals.get(index).setText((String) meals.get(index).getTag());
 		
 		gv.setVisibility(View.VISIBLE);
+		viewAll.setVisibility(View.VISIBLE);
 		itemView.setVisibility(View.GONE);
 		
 		gv.setAdapter(adapters[index]);
@@ -207,14 +247,12 @@ public class DiningFragment extends Fragment implements OnClickListener, OnItemC
 		catch(XmlPullParserException e) {e.printStackTrace(); }
 		
 		itemView.setText("");
-		RelativeLayout rl = (RelativeLayout) getActivity().findViewById(R.id.weekday_layout);
 		for(int i=0;i<parser.getLocations().get(0).get(day).get(mealIndex).get(position).size();i++)
-		{
 			itemView.append(parser.getLocations().get(0).get(day).get(mealIndex).get(position).get(i).getName()+"\n");
-		}
 		
 		gv.setVisibility(View.GONE);
 		itemView.setVisibility(View.VISIBLE);
+		viewAll.setVisibility(View.GONE);
 		
 		meals.get(mealIndex).setText("Back");
 		meals.get(mealIndex).setTextColor(Color.RED);

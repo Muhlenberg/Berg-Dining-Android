@@ -51,7 +51,6 @@ public class LSCCafeFragment extends Fragment
 	private void setup(View v)
 	{
 		TextView lscText = (TextView) v.findViewById(R.id.lscText);
-		lscText.setMovementMethod(new ScrollingMovementMethod());
 		ArrayList<mDiningLocation> locations = parser.getLocations();
 		for(int i=0;i<locations.get(LOCATION).size();i++)
 		{
