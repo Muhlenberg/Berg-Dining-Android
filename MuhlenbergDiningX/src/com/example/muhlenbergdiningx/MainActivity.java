@@ -21,9 +21,12 @@ import parsers.MiscParser;
 import viewpager.DiningPagerAdapter;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.AsyncTask;
@@ -55,13 +58,11 @@ import fragments.ViewPagerFragment;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener, OnPageChangeListener, OnItemSelectedListener
 {
-	private final String urlAddress = "http://stackoverflow.com/feeds/tag?tagnames=android&sort=newest";
-	private final String savePath = Environment.getExternalStorageState() + "/Dining Downloads";
+	private final String urlAddress = "http://mathcs.muhlenberg.edu/~mb247142/mDining.xml";
 
 	public static int screenWidth, screenHeight;
 
 	private ViewPager viewPager;
-	private DiningPagerAdapter pagerAdapter;
 	private ActionBar actionBar; 
 
 	private DrawerLayout drawerLayout;
@@ -91,11 +92,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 		title = "Muhlenberg Dining";
 
-		//network begin
-		setRefreshActionButtonState(true);
-		DownloadXML dxml = new DownloadXML(this);
-		dxml.execute(urlAddress);
-		//network end
+		//dialog
+		createNewUpdateDialog();
 
 		//make parser and pass it to other things
 		makeParsers();
@@ -209,7 +207,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		case R.id.action_settings:
 			return true;
 		case R.id.refresh:
-			DownloadXML dxml = new DownloadXML(this); dxml.execute(urlAddress);
+			createNewUpdateDialog();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -232,7 +230,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	@Override
 	public void onBackPressed()
 	{
-
+		//perhaps i will add fragment support but for now this will just exit the application
+		moveTaskToBack(true); //exits application but does not close it
 	}
 
 	private void displayView(int position) {
@@ -245,10 +244,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		case 1: fragment = HoursFragment.newInstance(parser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 		 break;
 		case 2: fragment = ContactsFragment.newInstance(parser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 	 break;
 		case 3: fragment = AboutFragment.newInstance(); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);			 break; 
-		//spinner, passed to nav drawer listener  
+		//spinner handles this; ignore
 		case 4: return;
-		//current issue: viewpager gets replaced by fragment, then how do i get it back?
-		//possible solution: put viewpager in fragment, replace said fragment back and forth
+		//spinner items
 		case 5: fragment = ViewPagerFragment.newInstance(parser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);break;
 		case 6: fragment = GQFragment.newInstance(gParser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 	 	 break;
 		case 7: fragment = LSCCafeFragment.newInstance(mParser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 	 break;
@@ -256,14 +254,11 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		default: Log.d("nav drawer", "position out of range " + position); break;
 		}
 
-		if(position==5)
-		{
-
-		}
 		if (fragment != null) 
 		{
 			FragmentManager fragmentManager = getSupportFragmentManager();
 			fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
+			
 		} 
 		else 
 			Log.d("MainActivity", "navigation drawer fragment error");
@@ -408,8 +403,37 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			}
 		}
 	}
+	
+	public void createNewUpdateDialog()
+	{
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage("New menu available! Would you like to update now?");
+		builder.setPositiveButton("Update", new OnClickListener()
+		{
+			@Override
+			public void onClick(DialogInterface dialog, int which) 
+			{
+				setRefreshActionButtonState(true);
+				DownloadXML dxml = new DownloadXML(MainActivity.this);
+				dxml.execute(urlAddress);
+				dialog.dismiss();
+			}
+			
+		});
+		builder.setNegativeButton("Nope", new OnClickListener()
+		{
+			@Override
+			public void onClick(DialogInterface dialog, int which) 
+			{
+				dialog.cancel();
+			}
+			
+		});
+		builder.create().show();;
 
+	}
 
+	
 	/**
 	 * Cannot download on main thread, create an async thread to do it instead
 	 * Saves a file called Dining Downloads.xml to a private space that can be used by the app
@@ -476,16 +500,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		{
 			super.onPreExecute();
 			((MainActivity)context).setRefreshActionButtonState(true);
-			Log.d("preexec", "changed image in pre exec");
 		}
 
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
 			((MainActivity)context).setRefreshActionButtonState(false);
-			Log.d("postexec", "changed image in post exec");
 		}
-		
-		
 	}
 }
