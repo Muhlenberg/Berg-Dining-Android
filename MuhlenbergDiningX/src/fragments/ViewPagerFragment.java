@@ -51,7 +51,6 @@ public class ViewPagerFragment extends Fragment
 		adapter = new DiningPagerAdapter(getActivity().getSupportFragmentManager(), parser);
 		viewPager.setAdapter(adapter);
 		viewPager.setOnPageChangeListener(((MainActivity)getActivity()));
-		viewPager.setOffscreenPageLimit(1);
 		viewPager.setCurrentItem(MainActivity.getNumDay());
 	}
 	

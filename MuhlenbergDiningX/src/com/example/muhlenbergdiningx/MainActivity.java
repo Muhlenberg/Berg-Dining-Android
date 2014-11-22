@@ -1,7 +1,12 @@
 package com.example.muhlenbergdiningx;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -18,9 +23,12 @@ import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -47,6 +55,9 @@ import fragments.ViewPagerFragment;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener, OnPageChangeListener, OnItemSelectedListener
 {
+	private final String urlAddress = "http://stackoverflow.com/feeds/tag?tagnames=android&sort=newest";
+	private final String savePath = Environment.getExternalStorageState() + "/Dining Downloads";
+
 	public static int screenWidth, screenHeight;
 
 	private ViewPager viewPager;
@@ -69,6 +80,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	public MiscParser mParser;
 	public GQParser gParser;
 
+	private Menu optionsMenu;
+
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -78,6 +91,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 		title = "Muhlenberg Dining";
 
+		//network begin
+		setRefreshActionButtonState(true);
+		DownloadXML dxml = new DownloadXML(this);
+		dxml.execute(urlAddress);
+		//network end
+
 		//make parser and pass it to other things
 		makeParsers();
 
@@ -85,7 +104,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		Fragment frag = ViewPagerFragment.newInstance(parser);
 		viewPager = ((ViewPagerFragment) frag).getViewPager();
 		getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, frag).commit();
-		
+
 		//actionbar
 		actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -160,7 +179,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
+		optionsMenu = menu;
 		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.menu.dining_refresh, menu);
 		return true;
 	}
 
@@ -187,6 +208,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		switch (item.getItemId()) {
 		case R.id.action_settings:
 			return true;
+		case R.id.refresh:
+			DownloadXML dxml = new DownloadXML(this); dxml.execute(urlAddress);
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -208,12 +232,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	@Override
 	public void onBackPressed()
 	{
-		if(viewPager.getCurrentItem() == 0)
-			viewPager.setCurrentItem(pagerAdapter.getCount()-1);
-		else
-			viewPager.setCurrentItem(viewPager.getCurrentItem()-1);
-		
-		
+
 	}
 
 	private void displayView(int position) {
@@ -239,7 +258,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 		if(position==5)
 		{
-			
+
 		}
 		if (fragment != null) 
 		{
@@ -248,7 +267,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		} 
 		else 
 			Log.d("MainActivity", "navigation drawer fragment error");
-		
+
 		// update selected item and title, then close the drawer
 		drawerList.setItemChecked(position, true);
 		drawerList.setSelection(position);
@@ -270,7 +289,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		default: return "Monday";
 		}
 	}
-	
+
 	private String getDay()
 	{
 		return tabs[getNumDay()];
@@ -375,5 +394,98 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		} 
 		catch(IOException ioe) {ioe.printStackTrace(); }
 		catch(XmlPullParserException e) {e.printStackTrace(); }
+	}
+
+	public void setRefreshActionButtonState(final boolean refreshing) {
+		if (optionsMenu != null) {
+			final MenuItem refreshItem = optionsMenu.findItem(R.id.refresh);
+			if (refreshItem != null) {
+				if (refreshing) {
+					refreshItem.setActionView(R.layout.actionbar_indeterminate_progress);
+				} else {
+					refreshItem.setActionView(null);
+				}
+			}
+		}
+	}
+
+
+	/**
+	 * Cannot download on main thread, create an async thread to do it instead
+	 * Saves a file called Dining Downloads.xml to a private space that can be used by the app
+	 * path and usability to be determined
+	 * @author jmankhan
+	 *
+	 */
+	private class DownloadXML extends AsyncTask<String, Void, String> 
+	{
+		private Context context;
+		
+		public DownloadXML(Context c)
+		{
+			context=c;
+		}
+
+		public void downloadFile()
+		{
+			try 
+			{
+				URL url = new URL(urlAddress);
+				HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+
+				urlConnection.setRequestMethod("GET");
+				urlConnection.setDoOutput(true);
+				urlConnection.connect();
+
+				File SDCardRoot = Environment.getExternalStorageDirectory();
+				File file = new File(SDCardRoot,"diningdownloads.xml");
+
+				FileOutputStream fileOutput = new FileOutputStream(file);
+				InputStream inputStream = urlConnection.getInputStream();
+
+				int totalSize = urlConnection.getContentLength();
+				int downloadedSize = 0;
+
+				byte[] buffer = new byte[1024];
+				int bufferLength = 0; //used to store a temporary size of the buffer
+
+				while ( (bufferLength = inputStream.read(buffer)) > 0 ) 
+				{
+					fileOutput.write(buffer, 0, bufferLength);
+					downloadedSize += bufferLength;
+				}
+				fileOutput.close();
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		@Override
+		protected String doInBackground(String... params) 
+		{
+			String str = "true";
+			downloadFile();
+			return str;
+		}
+
+		@Override
+		protected void onPreExecute() 
+		{
+			super.onPreExecute();
+			((MainActivity)context).setRefreshActionButtonState(true);
+			Log.d("preexec", "changed image in pre exec");
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			((MainActivity)context).setRefreshActionButtonState(false);
+			Log.d("postexec", "changed image in post exec");
+		}
+		
+		
 	}
 }

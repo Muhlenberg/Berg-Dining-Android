@@ -3,10 +3,10 @@ package viewpager;
 import parsers.DiningXmlParser;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import fragments.DiningFragment;
 
-public class DiningPagerAdapter extends FragmentPagerAdapter
+public class DiningPagerAdapter extends FragmentStatePagerAdapter
 {
 	private DiningXmlParser parser;
 	
