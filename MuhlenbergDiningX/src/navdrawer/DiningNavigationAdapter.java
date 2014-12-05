@@ -5,6 +5,7 @@ import java.util.Calendar;
 
 import parsers.DiningXmlParser;
 import parsers.MiscParser;
+import spinner.NoDefaultSpinner;
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.muhlenbergdiningx.DiningImageView;
@@ -65,7 +65,7 @@ public class DiningNavigationAdapter extends BaseAdapter
 			DiningImageView icon = (DiningImageView) convertView.findViewById(R.id.icon);
 			icon.setImageResource(items.get(position).getIcon());
 			
-			Spinner spinner = (Spinner) convertView.findViewById(R.id.spinner);
+			NoDefaultSpinner spinner = (NoDefaultSpinner) convertView.findViewById(R.id.spinner);
 			ArrayAdapter<CharSequence> sadapter = ArrayAdapter.createFromResource(context, R.array.spinner_items, android.R.layout.simple_spinner_item);
 			sadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			spinner.setAdapter(sadapter);

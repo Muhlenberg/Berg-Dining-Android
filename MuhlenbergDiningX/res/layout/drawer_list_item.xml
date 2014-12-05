@@ -29,7 +29,7 @@
         android:textSize="24sp" 
         android:visibility="gone"/>
 
-    <Spinner
+    <spinner.NoDefaultSpinner
         android:id="@+id/spinner"
         android:layout_width="0dp"
         android:layout_height="match_parent"

@@ -19,7 +19,6 @@
     </string-array>
 
     <string-array name="spinner_items">
-        <item>Locations</item>
         <item>Wood Dining</item>
         <item>GQ</item>
         <item>LSC Cafe</item>
