@@ -18,11 +18,10 @@ import org.xmlpull.v1.XmlPullParserException;
 import parsers.DiningXmlParser;
 import parsers.GQParser;
 import parsers.MiscParser;
-import viewpager.DiningPagerAdapter;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
-import android.app.AlertDialog;
 import android.app.ActionBar.Tab;
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -61,7 +60,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	private final String urlAddress = "http://mathcs.muhlenberg.edu/~mb247142/mDining.xml";
 
 	public static int screenWidth, screenHeight;
-
+	public static boolean doneParsing=false;
+	
 	private ViewPager viewPager;
 	private ActionBar actionBar; 
 
@@ -92,12 +92,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 		title = "Muhlenberg Dining";
 
-		//dialog
-		createNewUpdateDialog();
-
 		//make parser and pass it to other things
-		makeParsers();
+		makeParsers("mDining.xml");
 
+		//check if xml should update by comparing dates
+		//if so, present dialog for updating
+		if(shouldUpdate())
+			createNewUpdateDialog();
+				
 		//viewpager
 		Fragment frag = ViewPagerFragment.newInstance(parser);
 		viewPager = ((ViewPagerFragment) frag).getViewPager();
@@ -258,7 +260,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		{
 			FragmentManager fragmentManager = getSupportFragmentManager();
 			fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
-			
 		} 
 		else 
 			Log.d("MainActivity", "navigation drawer fragment error");
@@ -316,6 +317,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			viewPager.setCurrentItem(tab.getPosition());
 			setTitle(convertDay(tab.getPosition()));
 		}
+		else
+			Log.d("action tab select", "viewpager null");
 	}
 
 	@Override
@@ -360,7 +363,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	}
 
 	//should we be using BufferedInputStream?
-	public void makeParsers()
+	public void makeParsers(String xmlAddress)
 	{
 		parser = null;
 		mParser= null;
@@ -368,7 +371,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		InputStream is = null;
 		try
 		{
-			is = getAssets().open("mDining.xml");
+			is = getAssets().open(xmlAddress);
 			parser = new DiningXmlParser(is);
 		} 
 		catch(IOException ioe) {ioe.printStackTrace(); }
@@ -376,7 +379,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 		try
 		{
-			is = getAssets().open("mDining.xml");
+			is = getAssets().open(xmlAddress);
 			mParser = new MiscParser(is);
 		} 
 		catch(IOException ioe) {ioe.printStackTrace(); }
@@ -384,7 +387,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 		try
 		{
-			is = getAssets().open("mDining.xml");
+			is = getAssets().open(xmlAddress);
 			gParser = new GQParser(is);
 		} 
 		catch(IOException ioe) {ioe.printStackTrace(); }
@@ -432,7 +435,42 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		builder.create().show();;
 
 	}
+	
+	/**
+	 * Checks current date against highest date listed in xml file
+	 * if current date > max xml date, the app should request the user to update
+	 * @return true if shouldUpdate
+	 */
+	public boolean shouldUpdate()
+	{
+		boolean shouldUpdate = false;
+		
+		Calendar cal = Calendar.getInstance();
+		int currDate = cal.get(Calendar.DATE);
+		int currMonth = cal.get(Calendar.MONTH);
+		int currYear = cal.get(Calendar.YEAR);
 
+		int monthConstant = 10000;
+		int dayConstant = 100;
+		int parserD = Integer.parseInt(parser.getDate().getMaxDate());
+		if(parserD < 99999)//if less than 6 digits 
+		{
+			monthConstant=1000;
+			dayConstant = 10;
+		}
+		int parserMonth = parserD/monthConstant;
+		int parserDate = (parserMonth*monthConstant - parserD)/(dayConstant);
+		int parserYear = parserMonth*monthConstant - parserD*dayConstant;
+		
+		if(parserYear > currYear)
+			shouldUpdate=true;
+		else if(parserMonth > currMonth)
+			shouldUpdate=true;
+		else if(parserDate > currDate)
+			shouldUpdate=true;
+
+		return shouldUpdate;
+	}
 	
 	/**
 	 * Cannot download on main thread, create an async thread to do it instead

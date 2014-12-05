@@ -2,11 +2,16 @@ package parsers;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
+
+import com.example.muhlenbergdiningx.MainActivity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -17,6 +22,7 @@ public class DiningXmlParser implements Parcelable
 {
 	private ArrayList<DiningLocation> locations = new ArrayList<DiningLocation>();
 	private ArrayList<DiningContacts> contacts = new ArrayList<DiningContacts>();
+	private DiningDate date = null;
 	
 	public DiningXmlParser(InputStream is) throws XmlPullParserException, IOException
 	{
@@ -42,7 +48,13 @@ public class DiningXmlParser implements Parcelable
 				if(parser.getName().equalsIgnoreCase("location"))
 					location = new DiningLocation(parser.getAttributeValue(1));
 				else if(parser.getName().equalsIgnoreCase("day"))
+				{
+					if(parser.getAttributeValue(1).equalsIgnoreCase("Sunday"))
+					{
+						date = new DiningDate(parser.getAttributeValue(0));
+					}
 					day = new DiningDay(parser.getAttributeValue(1));
+				}
 				else if(parser.getName().equalsIgnoreCase("period"))
 					period = new DiningPeriod(parser.getAttributeValue(0));
 				else if(parser.getName().equalsIgnoreCase("station"))
@@ -83,24 +95,7 @@ public class DiningXmlParser implements Parcelable
 			parser.nextToken();
 		}
 		is.close();
-	}
-	
-	private String getDay()
-	{
-		Calendar cal = Calendar.getInstance();
-		int day = cal.get(Calendar.DAY_OF_WEEK);
-		
-		switch(day)
-		{
-		case Calendar.MONDAY: return "Monday";
-		case Calendar.TUESDAY: return "Tuesday";
-		case Calendar.WEDNESDAY: return "Wednesday";
-		case Calendar.THURSDAY: return "Thursday";
-		case Calendar.FRIDAY: return "Friday";
-		case Calendar.SATURDAY: return "Saturday";
-		case Calendar.SUNDAY: return "Sunday";
-		default: return "what";
-		}
+		MainActivity.doneParsing=true;
 	}
 	
 	public static class DiningLocation
@@ -259,6 +254,48 @@ public class DiningXmlParser implements Parcelable
 		}
 	}
 	
+	public static class DiningDate
+	{
+		private String maxDate;
+		public DiningDate(String maxDate)
+		{
+			this.maxDate = maxDate;
+		}
+		
+		public String getMaxDate()
+		{
+			try {
+				return formatDate(maxDate);
+			} catch (ParseException e) {e.printStackTrace();}
+			
+			return "error returning date";
+		}
+		
+		//sample date from xml
+		//"Sunday - September 28, 2014"
+		//returns 6 digit String in MMDDYY format
+		private String formatDate(String date) throws ParseException
+		{
+			if(date.contains("-"))
+			{
+				String parts[] = date.split("-"); //[Sunday] - [September 28, 2014]
+				date = parts[1].trim();
+				
+				String parts2[] = date.split("\\s"); //[September] [28,] [2014]
+				String month = parts2[0];
+				String day = parts2[1].substring(0, 2).trim();
+				String year = parts2[2].substring(2, parts2.length+1).trim();
+						
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(new SimpleDateFormat("MMM", Locale.ENGLISH).parse(month));
+				int monthInt = cal.get(Calendar.MONTH) + 1;
+				
+				date = Integer.toString(monthInt)+day+year;
+			}
+			return date;
+		}
+	}
+	
 	public static class DiningHours
 	{
 		private String hours;
@@ -338,16 +375,18 @@ public class DiningXmlParser implements Parcelable
 	{
 		return locations.get(location).get(day).size();
 	}
-
+	
+	public DiningDate getDate()
+	{
+		return date;
+	}
+	
 	@Override
 	public int describeContents() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		// TODO Auto-generated method stub
-		
 	}
 }
