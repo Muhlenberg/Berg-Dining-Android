@@ -134,7 +134,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 		navMenuIcons.recycle();
 
-		adapter = new DiningNavigationAdapter(this, navDrawerItems, parser, mParser);
+		adapter = new DiningNavigationAdapter(this, navDrawerItems);
 		drawerList.setAdapter(adapter);
 
 		drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer, R.string.app_name, R.string.app_name)
@@ -167,6 +167,11 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	}
 
+	/**
+	 * Listener that controls nav drawer selections
+	 * @author jmankhan
+	 *
+	 */
 	public class NavMenuListener implements OnItemClickListener
 	{
 		@Override

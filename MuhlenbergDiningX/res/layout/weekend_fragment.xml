@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <!-- Meals Tab Group -->
     <LinearLayout
         android:id="@+id/weekendMealContainer"
         android:layout_width="match_parent"
@@ -21,11 +22,13 @@
             android:layout_weight="0.5" />
     </LinearLayout>
 
+    <!-- Simple Line Divider -->
     <View
         style="@style/Divider"
         android:id="@+id/weekendDivider"
         android:layout_below="@id/weekendMealContainer" />
 
+    <!-- Station Button Holder -->
     <GridView
         android:id="@+id/weekendGridView"
         android:layout_width="match_parent"
@@ -44,17 +47,12 @@
         android:textSize="24sp"
         android:textColor="#fff"
         android:text="View All"/>
-        
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        android:layout_below="@id/weekendMealContainer">
-
-        <TextView
-            android:id="@+id/weekendItemView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="24sp"
-            android:visibility="gone" />
-    </ScrollView>    
+    
+    <!-- Item View -->
+	<ListView 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:id="@+id/weekendItemView"
+	    android:layout_below="@id/weekendMealContainer">
+	</ListView>
 </RelativeLayout>

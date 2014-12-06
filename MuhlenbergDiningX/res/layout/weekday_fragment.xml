@@ -37,6 +37,7 @@
         android:id="@+id/weekdayDivider"
         android:layout_below="@id/weekdayMealContainer" />
 
+    <!-- Gridview to display stations -->
     <GridView
         android:id="@+id/weekdayGridView"
         android:layout_width="match_parent"
@@ -60,17 +61,12 @@
 
     <!-- TextView to display items in each station -->
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        android:layout_below="@id/weekdayMealContainer">
 
-        <TextView
-            android:id="@+id/weekdayItemView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="24sp"
-            android:visibility="gone" />
-    </ScrollView>
-
+	<ListView 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:id="@+id/weekdayItemView"
+	    android:layout_below="@id/weekdayMealContainer">
+	</ListView>
+	
 </RelativeLayout>

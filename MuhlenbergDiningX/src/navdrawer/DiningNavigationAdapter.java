@@ -1,10 +1,7 @@
 package navdrawer;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
-import parsers.DiningXmlParser;
-import parsers.MiscParser;
 import spinner.NoDefaultSpinner;
 import android.app.Activity;
 import android.content.Context;
@@ -19,19 +16,25 @@ import com.example.muhlenbergdiningx.DiningImageView;
 import com.example.muhlenbergdiningx.MainActivity;
 import com.example.muhlenbergdiningx.R;
 
+/**
+ * This adapter controls the items within the navigation drawer
+ * @author jmankhan
+ *
+ */
 public class DiningNavigationAdapter extends BaseAdapter
 {
 	private Context context;
 	private ArrayList<DiningNavItem> items;
-	private DiningXmlParser parser;
-	private MiscParser mParser;
 	
-	public DiningNavigationAdapter(Context c, ArrayList<DiningNavItem> i, DiningXmlParser p, MiscParser mp)
+	/**
+	 * Constructor
+	 * @param c context of main activity
+	 * @param i arraylist of diningitems to put into drawer
+	 */
+	public DiningNavigationAdapter(Context c, ArrayList<DiningNavItem> i)
 	{
 		context = c;
 		items = i;
-		parser = p;
-		mParser = mp;
 	}
 	@Override
 	public int getCount() 
@@ -57,7 +60,7 @@ public class DiningNavigationAdapter extends BaseAdapter
 		if (convertView == null) 
 		{
             LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-            convertView = mInflater.inflate(R.layout.drawer_list_item, null);
+            convertView = mInflater.inflate(R.layout.drawer_list_item, parent, false);
         }
 		
 		if(items.get(position).isSpinner())
@@ -83,23 +86,5 @@ public class DiningNavigationAdapter extends BaseAdapter
 		}
 		
 		return convertView;
-	}
-
-	
-	private int getNumDay()
-	{
-		Calendar cal = Calendar.getInstance();
-		int currentDay = cal.get(Calendar.DAY_OF_WEEK);
-		switch(currentDay)
-		{
-		case Calendar.SUNDAY: 	return 6;
-		case Calendar.MONDAY: 	return 0;
-		case Calendar.TUESDAY: 	return 1;
-		case Calendar.WEDNESDAY:return 2;
-		case Calendar.THURSDAY: return 3;
-		case Calendar.FRIDAY: 	return 4;
-		case Calendar.SATURDAY: return 5;
-		default: return 0;
-		}
 	}
 }

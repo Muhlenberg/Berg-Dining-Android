@@ -17,10 +17,14 @@ public final class R {
         public static final int abc_slide_out_top=0x7f040005;
     }
     public static final class array {
+        /**  Nav Drawer Icons 
+         */
         public static final int nav_drawer_icons=0x7f0c0002;
         /**  Nav Drawer Menu Items 
          */
         public static final int nav_drawer_items=0x7f0c0000;
+        /**  Spinner Items 
+         */
         public static final int spinner_items=0x7f0c0001;
     }
     public static final class attr {
@@ -1094,15 +1098,18 @@ containing a value of this type.
         public static final int divider_gradient=0x7f02005b;
         public static final int divider_solid=0x7f02005c;
         public static final int home_icon=0x7f02005d;
-        public static final int ic_action_refresh=0x7f02005e;
-        public static final int ic_drawer=0x7f02005f;
-        public static final int ic_launcher=0x7f020060;
-        public static final int muhlenberg_logo=0x7f020061;
-        public static final int phone_icon=0x7f020062;
-        public static final int question_icon=0x7f020063;
-        public static final int selector_tab_text=0x7f020064;
-        public static final int stacked_background=0x7f020065;
-        public static final int tab_bar_background=0x7f020066;
+        public static final int ic_action_about=0x7f02005e;
+        public static final int ic_action_download=0x7f02005f;
+        public static final int ic_action_refresh=0x7f020060;
+        public static final int ic_drawer=0x7f020061;
+        public static final int ic_launcher=0x7f020062;
+        public static final int muhlenberg_logo=0x7f020063;
+        public static final int phone_icon=0x7f020064;
+        public static final int question_icon=0x7f020065;
+        public static final int selector_tab_text=0x7f020066;
+        public static final int solidline=0x7f020067;
+        public static final int stacked_background=0x7f020068;
+        public static final int tab_bar_background=0x7f020069;
     }
     public static final class id {
         public static final int aboutText=0x7f05003c;
@@ -1117,7 +1124,7 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f050016;
         public static final int action_menu_presenter=0x7f050017;
         public static final int action_mode_close_button=0x7f050024;
-        public static final int action_settings=0x7f050059;
+        public static final int action_settings=0x7f05005b;
         public static final int activity_chooser_view_content=0x7f050025;
         public static final int always=0x7f05000b;
         public static final int beginning=0x7f050011;
@@ -1136,17 +1143,19 @@ containing a value of this type.
         public static final int expand_activities_button=0x7f050026;
         public static final int expanded_menu=0x7f05002c;
         public static final int frame_container=0x7f05003e;
-        public static final int gqText=0x7f050043;
+        public static final int gqText=0x7f050045;
         public static final int home=0x7f050014;
         public static final int homeAsUp=0x7f050005;
-        public static final int hoursText=0x7f050044;
+        public static final int hoursText=0x7f050046;
         public static final int icon=0x7f05002a;
         public static final int ifRoom=0x7f05000a;
         public static final int image=0x7f050027;
-        public static final int javajoeText=0x7f050045;
+        public static final int itemListIcon=0x7f050043;
+        public static final int itemListText=0x7f050042;
+        public static final int javajoeText=0x7f050047;
         public static final int listMode=0x7f050001;
         public static final int list_item=0x7f050029;
-        public static final int lscText=0x7f050046;
+        public static final int lscText=0x7f050048;
         public static final int middle=0x7f050012;
         public static final int never=0x7f050009;
         public static final int none=0x7f050010;
@@ -1154,7 +1163,7 @@ containing a value of this type.
         public static final int progress_circular=0x7f050018;
         public static final int progress_horizontal=0x7f050019;
         public static final int radio=0x7f05002f;
-        public static final int refresh=0x7f050058;
+        public static final int refresh=0x7f05005a;
         public static final int search_badge=0x7f050032;
         public static final int search_bar=0x7f050031;
         public static final int search_button=0x7f050033;
@@ -1169,7 +1178,7 @@ containing a value of this type.
         public static final int showCustom=0x7f050007;
         public static final int showHome=0x7f050004;
         public static final int showTitle=0x7f050006;
-        public static final int spinner=0x7f050042;
+        public static final int spinner=0x7f050044;
         public static final int split_action_bar=0x7f05001e;
         public static final int submit_area=0x7f050039;
         public static final int tabMode=0x7f050002;
@@ -1177,23 +1186,23 @@ containing a value of this type.
         public static final int top_action_bar=0x7f050020;
         public static final int up=0x7f050021;
         public static final int useLogo=0x7f050003;
-        public static final int viewPager=0x7f050047;
-        public static final int weekdayDivider=0x7f05004d;
-        public static final int weekdayGridView=0x7f05004e;
-        public static final int weekdayItemView=0x7f050050;
-        public static final int weekdayMealContainer=0x7f050049;
-        public static final int weekdayViewAll=0x7f05004f;
-        public static final int weekday_breakfast=0x7f05004a;
-        public static final int weekday_dinner=0x7f05004c;
-        public static final int weekday_layout=0x7f050048;
-        public static final int weekday_lunch=0x7f05004b;
-        public static final int weekendDivider=0x7f050054;
-        public static final int weekendGridView=0x7f050055;
-        public static final int weekendItemView=0x7f050057;
-        public static final int weekendMealContainer=0x7f050051;
-        public static final int weekendViewAll=0x7f050056;
-        public static final int weekend_brunch=0x7f050052;
-        public static final int weekend_dinner=0x7f050053;
+        public static final int viewPager=0x7f050049;
+        public static final int weekdayDivider=0x7f05004f;
+        public static final int weekdayGridView=0x7f050050;
+        public static final int weekdayItemView=0x7f050052;
+        public static final int weekdayMealContainer=0x7f05004b;
+        public static final int weekdayViewAll=0x7f050051;
+        public static final int weekday_breakfast=0x7f05004c;
+        public static final int weekday_dinner=0x7f05004e;
+        public static final int weekday_layout=0x7f05004a;
+        public static final int weekday_lunch=0x7f05004d;
+        public static final int weekendDivider=0x7f050056;
+        public static final int weekendGridView=0x7f050057;
+        public static final int weekendItemView=0x7f050059;
+        public static final int weekendMealContainer=0x7f050053;
+        public static final int weekendViewAll=0x7f050058;
+        public static final int weekend_brunch=0x7f050054;
+        public static final int weekend_dinner=0x7f050055;
         public static final int withText=0x7f05000c;
     }
     public static final class integer {
@@ -1252,15 +1261,16 @@ containing a value of this type.
         public static final int contactsfragment=0x7f03001b;
         public static final int dining_periodbutton=0x7f03001c;
         public static final int dininggridbutton=0x7f03001d;
-        public static final int drawer_list_item=0x7f03001e;
-        public static final int gqfragment=0x7f03001f;
-        public static final int hoursfragment=0x7f030020;
-        public static final int javajoefragment=0x7f030021;
-        public static final int lsccafefragment=0x7f030022;
-        public static final int support_simple_spinner_dropdown_item=0x7f030023;
-        public static final int viewpagerfragment=0x7f030024;
-        public static final int weekday_fragment=0x7f030025;
-        public static final int weekend_fragment=0x7f030026;
+        public static final int dininglistviewitem=0x7f03001e;
+        public static final int drawer_list_item=0x7f03001f;
+        public static final int gqfragment=0x7f030020;
+        public static final int hoursfragment=0x7f030021;
+        public static final int javajoefragment=0x7f030022;
+        public static final int lsccafefragment=0x7f030023;
+        public static final int support_simple_spinner_dropdown_item=0x7f030024;
+        public static final int viewpagerfragment=0x7f030025;
+        public static final int weekday_fragment=0x7f030026;
+        public static final int weekend_fragment=0x7f030027;
     }
     public static final class menu {
         public static final int dining_refresh=0x7f0d0000;
@@ -1307,9 +1317,8 @@ containing a value of this type.
         /**  Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
         public static final int abc_shareactionprovider_share_with_application=0x7f0a000b;
-        public static final int action_settings=0x7f0a000f;
+        public static final int action_settings=0x7f0a000e;
         public static final int app_name=0x7f0a000d;
-        public static final int hello_world=0x7f0a000e;
     }
     public static final class style {
         /** 
