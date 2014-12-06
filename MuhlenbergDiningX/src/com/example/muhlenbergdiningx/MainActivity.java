@@ -251,12 +251,11 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		case 1: fragment = HoursFragment.newInstance(parser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 		 break;
 		case 2: fragment = ContactsFragment.newInstance(parser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 	 break;
 		case 3: fragment = AboutFragment.newInstance(); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);			 break; 
-		case 4: return; //spinner handles this; ignore
 		//spinner items
-		case 5: fragment = ViewPagerFragment.newInstance(parser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);break;
-		case 6: fragment = GQFragment.newInstance(gParser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 	 	 break;
-		case 7: fragment = LSCCafeFragment.newInstance(mParser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 	 break;
-		case 8: fragment = JavaJoeFragment.newInstance(mParser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 	 break;
+		case 4: fragment = ViewPagerFragment.newInstance(parser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);break;
+		case 5: fragment = GQFragment.newInstance(gParser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 	 	 break;
+		case 6: fragment = LSCCafeFragment.newInstance(mParser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 	 break;
+		case 7: fragment = JavaJoeFragment.newInstance(mParser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 	 break;
 		default: Log.d("nav drawer", "position out of range " + position); break;
 		}
 

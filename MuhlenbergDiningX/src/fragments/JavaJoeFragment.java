@@ -2,15 +2,15 @@ package fragments;
 
 import java.util.ArrayList;
 
+import listview.DiningListviewAdapter;
 import parsers.MiscParser;
 import parsers.MiscParser.mDiningLocation;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import com.example.muhlenbergdiningx.R;
 
@@ -18,6 +18,10 @@ public class JavaJoeFragment extends Fragment
 {
 	private final int LOCATION = 3;
 	private MiscParser parser;
+	
+	private ListView jjList;
+	private DiningListviewAdapter adapter;
+	private ArrayList<String> itemString;
 	
 	public JavaJoeFragment()
 	{
@@ -50,11 +54,20 @@ public class JavaJoeFragment extends Fragment
 	
 	private void setup(View v)
 	{
-		TextView javajoeText = (TextView) v.findViewById(R.id.javajoeText);
+		jjList = (ListView) v.findViewById(R.id.javajoeList);
 		ArrayList<mDiningLocation> locations = parser.getLocations();
+		itemString = new ArrayList<String>();
+		
 		for(int i=0;i<locations.get(LOCATION).size();i++)
 		{
-			javajoeText.append(locations.get(LOCATION).get(i) + "\n");
+			itemString.add(parser.getLocations().get(LOCATION).get(i));
 		}
+	}
+	
+	public void onResume()
+	{
+		super.onResume();
+		adapter = new DiningListviewAdapter(getActivity(), itemString, false);
+		jjList.setAdapter(adapter);
 	}
 }

@@ -13,19 +13,29 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.example.muhlenbergdiningx.DiningImageView;
 import com.example.muhlenbergdiningx.R;
 
 public class DiningListviewAdapter extends BaseAdapter
 {
 	private Context context;
 	private ArrayList<String> items;
-
+	private boolean showIcon;
+	
 	public DiningListviewAdapter(Context c, ArrayList<String> i)
 	{
 		context	= c;
 		items 	= i;
+		showIcon=true;
 	}
 
+	public DiningListviewAdapter(Context c, ArrayList<String>i, boolean s)
+	{
+		context = c;
+		items   = i;
+		showIcon= s;
+	}
+	
 	@Override
 	public int getCount() {
 		return items.size();
@@ -53,7 +63,7 @@ public class DiningListviewAdapter extends BaseAdapter
 		
 		TextView text = (TextView) convertView.findViewById(R.id.itemListText);
 		text.setText(items.get(position));
-		
+
 		convertView.setOnClickListener(new OnClickListener()
 		{
 			@Override
@@ -71,6 +81,14 @@ public class DiningListviewAdapter extends BaseAdapter
 			}
 			
 		});
+		
+		if(!showIcon)
+		{
+			DiningImageView icon = (DiningImageView) convertView.findViewById(R.id.itemListIcon);
+			icon.setImageAlpha(00);
+			convertView.setOnClickListener(null);
+		}
+
 		return convertView;
 	}
 

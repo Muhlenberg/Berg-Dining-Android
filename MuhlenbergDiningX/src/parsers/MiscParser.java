@@ -72,6 +72,11 @@ public class MiscParser implements Parcelable
 		{
 			return items.size();
 		}
+		
+		public ArrayList<String> getItems()
+		{
+			return items;
+		}
 	}
 	
 	public ArrayList<mDiningLocation> getLocations()

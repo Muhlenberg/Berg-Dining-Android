@@ -2,15 +2,14 @@ package fragments;
 
 import java.util.ArrayList;
 
+import listview.DiningListviewAdapter;
 import parsers.MiscParser;
-import parsers.MiscParser.mDiningLocation;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import com.example.muhlenbergdiningx.R;
 
@@ -18,6 +17,10 @@ public class LSCCafeFragment extends Fragment
 {
 	private final int LOCATION = 2;
 	private MiscParser parser;
+	
+	private ListView lscList;
+	private DiningListviewAdapter adapter;
+	private ArrayList<String>itemString;
 	
 	public LSCCafeFragment()
 	{
@@ -50,11 +53,15 @@ public class LSCCafeFragment extends Fragment
 	
 	private void setup(View v)
 	{
-		TextView lscText = (TextView) v.findViewById(R.id.lscText);
-		ArrayList<mDiningLocation> locations = parser.getLocations();
-		for(int i=0;i<locations.get(LOCATION).size();i++)
-		{
-			lscText.append(locations.get(LOCATION).get(i) + "\n");
-		}
+		lscList = (ListView) v.findViewById(R.id.lscList);
+		itemString = parser.getLocations().get(LOCATION).getItems();
+	}
+	
+	public void onResume()
+	{
+		super.onResume();
+		
+		adapter = new DiningListviewAdapter(getActivity(), itemString, false);
+		lscList.setAdapter(adapter);
 	}
 }

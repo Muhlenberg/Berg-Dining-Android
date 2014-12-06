@@ -1,17 +1,16 @@
 package fragments;
 
+import java.util.ArrayList;
+
+import listview.DiningExpandableListAdapter;
 import parsers.GQParser;
-import android.graphics.Color;
+import parsers.GQParser.GQDiningStation;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.method.ScrollingMovementMethod;
-import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ExpandableListView;
 
 import com.example.muhlenbergdiningx.R;
 
@@ -19,6 +18,10 @@ public class GQFragment extends Fragment
 {
 	private final int LOCATION = 1;
 	private GQParser parser;
+	
+	private ExpandableListView gqList;
+	private DiningExpandableListAdapter adapter;
+	private ArrayList<GQDiningStation> stations;
 	
 	public GQFragment()
 	{
@@ -51,20 +54,14 @@ public class GQFragment extends Fragment
 	
 	private void setup(View v)
 	{
-		TextView gqText = (TextView) v.findViewById(R.id.gqText);
-		int stations = parser.getLocations().get(1).size();
-		for(int i=0;i<stations;i++)
-		{
-			String stationName = parser.getLocations().get(LOCATION).get(i).getName();
-			Spannable text = new SpannableString(stationName);
-			text.setSpan(new ForegroundColorSpan(Color.RED), 0, stationName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-			
-			gqText.append(text);
-			gqText.append("\n");//span makes things weird a bit
-			for(int j=0;j<parser.getLocations().get(LOCATION).get(i).size(); j++)
-			{
-				gqText.append("\t\t" + parser.getLocations().get(LOCATION).get(i).get(j) + "\n");
-			}
-		}
+		gqList = (ExpandableListView)v.findViewById(R.id.gqList);
+		stations = parser.getLocations().get(LOCATION).getStations();
+	}
+	
+	public void onResume()
+	{
+		super.onResume();
+		adapter = new DiningExpandableListAdapter(getActivity(), stations);
+		gqList.setAdapter(adapter);
 	}
 }

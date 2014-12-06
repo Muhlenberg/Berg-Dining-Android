@@ -78,6 +78,10 @@ public class GQParser implements Parcelable
 			return stations.size();
 		}
 		
+		public ArrayList<GQDiningStation> getStations()
+		{
+			return stations;
+		}
 	}
 	
 	public static class GQDiningStation
