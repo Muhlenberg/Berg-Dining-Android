@@ -36,7 +36,7 @@ public class AboutFragment extends Fragment
 	{
 		TextView aboutText = (TextView) v.findViewById(R.id.aboutText);
 		String about = "This app was developed by the Muhlenberg Computer Science Club for the "
-				+ "purpose of benefiting hungry Muhlenberg Students and making the Dining Services information techonologies more accessible."
+				+ "purpose of benefitting hungry Muhlenberg Students and making the Dining Services information techonologies more accessible."
 				+ " Somebody come up with a better about text";
 		
 		aboutText.setText(about);

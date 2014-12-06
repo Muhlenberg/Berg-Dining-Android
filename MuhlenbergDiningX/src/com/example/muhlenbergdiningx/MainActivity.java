@@ -320,7 +320,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	public void onTabSelected(Tab tab, FragmentTransaction ft) 
 	{
 		//need a better place for this
-		viewPager = ((ViewPagerFragment) currentFragment).getViewPager();
+		if(currentFragment instanceof ViewPagerFragment)
+			viewPager = ((ViewPagerFragment) currentFragment).getViewPager();
 		
 		if(viewPager!=null)
 		{
