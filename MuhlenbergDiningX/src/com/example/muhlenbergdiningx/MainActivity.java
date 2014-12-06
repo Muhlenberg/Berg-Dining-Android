@@ -75,7 +75,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	private DiningNavigationAdapter adapter;
 
 	private CharSequence title;
-	private String[] tabs = {"Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"};
+	private String[] tabs = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
 
 	public DiningXmlParser parser;
 	public MiscParser mParser;
