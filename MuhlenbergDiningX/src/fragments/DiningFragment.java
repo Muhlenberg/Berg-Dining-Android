@@ -25,12 +25,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.muhlenbergdiningx.DiningGridAdapter;
+import com.example.muhlenbergdiningx.MainActivity;
 import com.example.muhlenbergdiningx.R;
 
 public class DiningFragment extends Fragment implements OnClickListener, OnItemClickListener
 {
 	private int day = -1;
-	private int mealIndex=0;
+	public int mealIndex=0;
 	
 	private GridView gv;
 	private ArrayList<ArrayList<DiningStation>> stations;
@@ -248,6 +249,7 @@ public class DiningFragment extends Fragment implements OnClickListener, OnItemC
 		itemView.setVisibility(View.GONE);
 		
 		gv.setAdapter(adapters[index]);
+		MainActivity.itemViewOpen=false;
 	}
 	
 	/**
@@ -280,6 +282,8 @@ public class DiningFragment extends Fragment implements OnClickListener, OnItemC
 		
 		meals.get(mealIndex).setText("Back");
 		meals.get(mealIndex).setTextColor(Color.RED);
+
+		MainActivity.itemViewOpen=true;
 	}
 	
 	public void onResume()

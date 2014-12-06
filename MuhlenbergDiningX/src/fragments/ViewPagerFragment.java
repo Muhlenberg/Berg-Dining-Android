@@ -58,4 +58,9 @@ public class ViewPagerFragment extends Fragment
 	{
 		return viewPager;
 	}
+	
+	public DiningPagerAdapter getAdapter()
+	{
+		return adapter;
+	}
 }

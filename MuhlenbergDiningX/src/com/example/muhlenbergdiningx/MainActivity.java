@@ -60,7 +60,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	private final String urlAddress = "http://mathcs.muhlenberg.edu/~mb247142/mDining.xml";
 
 	public static int screenWidth, screenHeight;
-	public static boolean doneParsing=false;
+	public static boolean doneParsing=false, itemViewOpen=false;
 	
 	private ViewPager viewPager;
 	private ActionBar actionBar; 
@@ -75,14 +75,15 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	private DiningNavigationAdapter adapter;
 
 	private CharSequence title;
-	private String[] tabs = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+	private String[] tabs = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
 
 	public DiningXmlParser parser;
 	public MiscParser mParser;
 	public GQParser gParser;
 
 	private Menu optionsMenu;
-
+	private Fragment currentFragment;
+	
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -102,9 +103,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 				
 		//viewpager
 		Fragment frag = ViewPagerFragment.newInstance(parser);
-		viewPager = ((ViewPagerFragment) frag).getViewPager();
 		getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, frag).commit();
-
+		currentFragment = frag;
+		
 		//actionbar
 		actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -237,8 +238,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	@Override
 	public void onBackPressed()
 	{
-		//perhaps i will add fragment support but for now this will just exit the application
-		moveTaskToBack(true); //exits application but does not close it
+		super.onBackPressed();
 	}
 
 	private void displayView(int position) {
@@ -251,8 +251,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		case 1: fragment = HoursFragment.newInstance(parser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 		 break;
 		case 2: fragment = ContactsFragment.newInstance(parser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 	 break;
 		case 3: fragment = AboutFragment.newInstance(); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);			 break; 
-		//spinner handles this; ignore
-		case 4: return;
+		case 4: return; //spinner handles this; ignore
 		//spinner items
 		case 5: fragment = ViewPagerFragment.newInstance(parser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);break;
 		case 6: fragment = GQFragment.newInstance(gParser); actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); 	 	 break;
@@ -264,7 +263,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		if (fragment != null) 
 		{
 			FragmentManager fragmentManager = getSupportFragmentManager();
-			fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
+			fragmentManager.beginTransaction().replace(R.id.frame_container, fragment, fragment.getClass().getName())
+				.addToBackStack(null).commit();
+			currentFragment=fragment;
 		} 
 		else 
 			Log.d("MainActivity", "navigation drawer fragment error");
@@ -274,6 +275,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		drawerList.setSelection(position);
 		setTitle(navMenuTitles[position]);
 		drawerLayout.closeDrawer(drawerList);
+		
+		Log.d("backstack", ""+getSupportFragmentManager().getFragments().size());
 	}
 
 	private String convertDay(int pos)
@@ -317,6 +320,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	@Override
 	public void onTabSelected(Tab tab, FragmentTransaction ft) 
 	{
+		//need a better place for this
+		viewPager = ((ViewPagerFragment) currentFragment).getViewPager();
+		
 		if(viewPager!=null)
 		{
 			viewPager.setCurrentItem(tab.getPosition());
