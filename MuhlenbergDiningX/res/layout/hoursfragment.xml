@@ -5,11 +5,21 @@
     
     <TextView
         android:id="@+id/hoursText"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:textSize="18sp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:scrollbars="vertical"/>
+        android:textSize="20sp"
+        />
 
+    <TextView
+        android:id="@+id/hoursText2"
+        android:layout_toRightOf="@id/hoursText"
+        android:layout_toEndOf="@id/hoursText"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:textSize="20sp"
+        android:gravity="end"
+        />
+    
 </RelativeLayout>

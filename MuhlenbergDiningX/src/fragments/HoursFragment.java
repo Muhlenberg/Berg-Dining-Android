@@ -1,5 +1,7 @@
 package fragments;
 
+import java.util.ArrayList;
+
 import parsers.DiningXmlParser;
 import parsers.DiningXmlParser.DiningHours;
 import android.os.Bundle;
@@ -14,9 +16,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.muhlenbergdiningx.R;
-import com.example.muhlenbergdiningx.R.color;
-import com.example.muhlenbergdiningx.R.id;
-import com.example.muhlenbergdiningx.R.layout;
 
 public class HoursFragment extends Fragment 
 {
@@ -54,18 +53,47 @@ public class HoursFragment extends Fragment
 	private void setup(View v)
 	{
 		TextView hoursText = (TextView) v.findViewById(R.id.hoursText);
-		hoursText.setMovementMethod(new ScrollingMovementMethod());
-		hoursText.setText("");
-		
+		TextView hoursText2 = (TextView) v.findViewById(R.id.hoursText2);
 		Spanned text;
 		DiningHours hours;
+
+		StringBuilder days = new StringBuilder();
+		StringBuilder times = new StringBuilder();
+		
 		for(int i=0;i<parser.getLocationCount();i++)
 		{
 			hours = parser.getLocations().get(i).getHours();
 			text = Html.fromHtml(hours.getHours());
 			text = (Spanned) text.subSequence(TextUtils.indexOf(text, "}")+1, text.length());
-			hoursText.append(parser.getLocations().get(i).getName() + "\n" + text);
+			
+			String adjusted = text.toString().replaceAll("(?m)^[ \t]*\r?\n", ""); //regex - eliminates empty lines
+			String toRemove = adjusted.substring(17, 21);
+			adjusted = adjusted.replace(toRemove, " ");
+			adjusted = adjusted.replaceAll("to", "-");
+			adjusted = adjusted.replaceAll(" ", "");
+
+			//split up days and times so i can format better, evens are days, odds are times
+			String[] dummy = adjusted.split("\\s");
+			ArrayList<String> parts = new ArrayList<String>();
+			for(String s:dummy)
+				parts.add(s);
+			
+			for(int j=0;j<parts.size();j++)
+			{
+				if(j%2==0)
+					days.append(parts.get(j) + "\n");
+				else
+					times.append(parts.get(j) + "\n");
+			}
+				
+			String name = parser.getLocations().get(i).getName();
+			if(i==0)
+				name="Wood Dining";
+			
+			hoursText.append(name + "\n" + days.toString() + "\n");
+			hoursText2.append("\n" + times.toString() + "\n");
+			days = new StringBuilder();
+			times = new StringBuilder();
 		}
-		
 	}
-	}
+}
