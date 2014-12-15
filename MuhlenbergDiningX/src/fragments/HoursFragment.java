@@ -83,7 +83,7 @@ public class HoursFragment extends Fragment
 				if(j%2==0)
 					days.append(parts.get(j) + "\n");
 				else
-					times.append(parts.get(j) + "\n");
+					times.append("\t\t"+ parts.get(j) + "\n");
 			}
 				
 			String name = parser.getLocations().get(i).getName();
